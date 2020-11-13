@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import com.example.foot_panel.databinding.ViewInputBinding;
 import com.sd.lib.foot_panel.FootPanelListener;
 import com.sd.lib.foot_panel.ext.FKeyboardHeightKeeper;
-import com.sd.lib.foot_panel.ext.FKeyboardHeightLayout;
+import com.sd.lib.foot_panel.ext.FKeyboardVisibleHeightLayout;
 import com.sd.lib.foot_panel.panel.IFootPanel;
 import com.sd.lib.foot_panel.panel.KeyboardFootPanel;
 import com.sd.lib.foot_panel.panel.ViewFootPanel;
@@ -76,7 +76,7 @@ public class InputView extends FrameLayout implements View.OnClickListener
     private View getKeyboardView()
     {
         if (mKeyboardView == null)
-            mKeyboardView = new FKeyboardHeightLayout(getContext());
+            mKeyboardView = new FKeyboardVisibleHeightLayout(getContext());
         return mKeyboardView;
     }
 

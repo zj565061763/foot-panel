@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 /**
- * 高度为键盘可见高度的布局
+ * 高度为键盘高度的布局
  */
 public class FKeyboardHeightLayout extends FrameLayout
 {
@@ -41,12 +41,9 @@ public class FKeyboardHeightLayout extends FrameLayout
         }
     };
 
-    private int getKeyboardHeight()
+    protected int getKeyboardHeight()
     {
-        int height = FKeyboardListener.of(mActivity).getKeyboardVisibleHeight();
-        if (height == 0)
-            height = FKeyboardListener.getCachedKeyboardVisibleHeight();
-        return height;
+        return FKeyboardListener.of(mActivity).getKeyboardVisibleHeight();
     }
 
     private void updateHeight()
