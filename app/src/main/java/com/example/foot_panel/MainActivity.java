@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.foot_panel.databinding.ActivityMainBinding;
+import com.example.foot_panel.dialog.TestDialog;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mBinding.btnKeyboard.setOnClickListener(this);
         mBinding.btnFootPanel.setOnClickListener(this);
+
+        new TestDialog(this).show();
     }
 
     @Override
