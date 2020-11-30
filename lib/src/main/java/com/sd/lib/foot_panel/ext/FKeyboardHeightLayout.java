@@ -32,6 +32,11 @@ public class FKeyboardHeightLayout extends FrameLayout
         mActivity = (Activity) context;
     }
 
+    public final FKeyboardListener getKeyboardListener()
+    {
+        return FKeyboardListener.of(mActivity);
+    }
+
     private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback()
     {
         @Override
@@ -43,7 +48,7 @@ public class FKeyboardHeightLayout extends FrameLayout
 
     protected int getKeyboardHeight()
     {
-        return FKeyboardListener.of(mActivity).getKeyboardVisibleHeight();
+        return getKeyboardListener().getKeyboardHeight();
     }
 
     private void updateHeight()
@@ -73,7 +78,7 @@ public class FKeyboardHeightLayout extends FrameLayout
     protected void onAttachedToWindow()
     {
         super.onAttachedToWindow();
-        FKeyboardListener.of(mActivity).addCallback(mKeyboardCallback);
+        getKeyboardListener().addCallback(mKeyboardCallback);
         updateHeight();
     }
 
@@ -81,6 +86,6 @@ public class FKeyboardHeightLayout extends FrameLayout
     protected void onDetachedFromWindow()
     {
         super.onDetachedFromWindow();
-        FKeyboardListener.of(mActivity).removeCallback(mKeyboardCallback);
+        getKeyboardListener().removeCallback(mKeyboardCallback);
     }
 }
