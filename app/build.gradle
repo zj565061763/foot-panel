@@ -39,4 +39,5 @@ dependencies {
     implementation project(path: ':lib')
     implementation 'com.github.zj565061763:utils:1.1.24'
     implementation 'com.github.zj565061763:dialoger:1.2.0-beta4'
+    implementation 'com.github.zj565061763:systemui:1.0.0-beta21'
 }

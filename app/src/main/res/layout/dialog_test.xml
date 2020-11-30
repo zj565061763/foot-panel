@@ -5,8 +5,14 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <com.example.foot_panel.view.InputView
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <EditText
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
