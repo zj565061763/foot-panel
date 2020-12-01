@@ -72,6 +72,8 @@ abstract class BaseKeyboardListener
 
     /**
      * 开始监听
+     *
+     * @param window
      */
     public final void start(Window window)
     {
@@ -79,11 +81,13 @@ abstract class BaseKeyboardListener
             return;
 
         final View target = window.getDecorView();
-        setTarget(target);
+        if (setTarget(target))
+            hidePopupWindow();
+
         showPopupWindow(target);
     }
 
-    private void setTarget(View target)
+    private boolean setTarget(View target)
     {
         final View old = mTarget;
         if (old != target)
@@ -95,7 +99,10 @@ abstract class BaseKeyboardListener
 
             if (target != null)
                 target.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
+
+            return true;
         }
+        return false;
     }
 
     private final View.OnAttachStateChangeListener mOnAttachStateChangeListener = new View.OnAttachStateChangeListener()
@@ -113,6 +120,12 @@ abstract class BaseKeyboardListener
         }
     };
 
+    /**
+     * 显示PopupWindow
+     *
+     * @param target
+     * @return
+     */
     private boolean showPopupWindow(View target)
     {
         if (target == null)
@@ -139,6 +152,9 @@ abstract class BaseKeyboardListener
         }
     }
 
+    /**
+     * 隐藏PopupWindow
+     */
     private void hidePopupWindow()
     {
         if (mPopupWindow != null)
@@ -146,11 +162,6 @@ abstract class BaseKeyboardListener
             mPopupWindow.dismiss();
             mPopupWindow = null;
         }
-    }
-
-    private void onWindowHeightChanged(int height)
-    {
-        // private 暂不开放
     }
 
     protected void onStart()
