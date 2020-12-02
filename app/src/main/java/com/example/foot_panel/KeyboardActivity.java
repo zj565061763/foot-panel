@@ -39,7 +39,7 @@ public class KeyboardActivity extends AppCompatActivity
         @Override
         public void onKeyboardHeightChanged(int height, FKeyboardListener listener)
         {
-            Log.i(TAG, "onKeyboardHeightChanged height:" + height + " visibleHeight:" + listener.getKeyboardVisibleHeight());
+            Log.i(TAG, "onKeyboardHeightChanged height:" + height);
         }
     };
 }
