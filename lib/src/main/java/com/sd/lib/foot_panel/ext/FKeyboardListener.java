@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Window;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -131,6 +132,17 @@ public class FKeyboardListener
         return start;
     }
 
+    /**
+     * 停止监听
+     */
+    private void stop()
+    {
+        mKeyboardListener.stop();
+
+        final Application application = mActivity.getApplication();
+        application.unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
+    }
+
     private final Application.ActivityLifecycleCallbacks mActivityLifecycleCallbacks = new Application.ActivityLifecycleCallbacks()
     {
         @Override
@@ -167,10 +179,7 @@ public class FKeyboardListener
         public void onActivityDestroyed(Activity activity)
         {
             if (mActivity == activity)
-            {
-                activity.getApplication().unregisterActivityLifecycleCallbacks(this);
                 removeActivity(activity);
-            }
         }
     };
 
@@ -187,7 +196,7 @@ public class FKeyboardListener
 
     //---------- static ----------
 
-    private static final Map<Activity, FKeyboardListener> MAP_LISTENER = new WeakHashMap<>();
+    private static final Map<Activity, FKeyboardListener> MAP_LISTENER = new HashMap<>();
 
     public static synchronized FKeyboardListener of(Activity activity)
     {
@@ -209,6 +218,8 @@ public class FKeyboardListener
         if (activity == null)
             return;
 
-        MAP_LISTENER.remove(activity);
+        final FKeyboardListener listener = MAP_LISTENER.remove(activity);
+        if (listener != null)
+            listener.stop();
     }
 }

@@ -94,6 +94,15 @@ public abstract class FWindowKeyboardListener
         return true;
     }
 
+    /**
+     * 停止监听
+     */
+    public final void stop()
+    {
+        hidePopupWindow();
+        setTarget(null);
+    }
+
     private boolean setTarget(View target)
     {
         final View old = mTarget;
