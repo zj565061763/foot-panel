@@ -77,6 +77,9 @@ public abstract class FWindowKeyboardListener
      */
     public final void start(Window window)
     {
+        if (mActivity.isFinishing())
+            return;
+
         if (window == null)
             return;
 
