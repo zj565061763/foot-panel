@@ -3,6 +3,7 @@ package com.example.foot_panel.dialog;
 import android.app.Activity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.example.foot_panel.R;
@@ -13,6 +14,7 @@ public class TestDialog extends FDialoger
 {
     private static final String TAG = TestDialog.class.getSimpleName();
 
+    private View view_root;
     private final FWindowKeyboardListener mKeyboardListener;
 
     public TestDialog(Activity activity)
@@ -24,6 +26,7 @@ public class TestDialog extends FDialoger
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         setContentView(R.layout.dialog_test);
+        view_root = findViewById(R.id.view_root);
 
         mKeyboardListener = new FWindowKeyboardListener(activity)
         {
@@ -31,6 +34,7 @@ public class TestDialog extends FDialoger
             protected void onKeyboardHeightChanged(int height)
             {
                 Log.i(TAG, "onKeyboardHeightChanged:" + height);
+                view_root.scrollTo(0, height);
             }
 
             @Override
