@@ -84,6 +84,9 @@ public abstract class FWindowKeyboardListener
             return;
 
         final View target = window.getDecorView();
+        if (target == null)
+            return;
+
         if (setTarget(target))
             hidePopupWindow();
 
