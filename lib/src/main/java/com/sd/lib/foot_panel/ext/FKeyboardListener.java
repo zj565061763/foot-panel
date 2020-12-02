@@ -2,18 +2,8 @@ package com.sd.lib.foot_panel.ext;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.view.WindowManager;
-import android.widget.PopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,20 +16,7 @@ import java.util.WeakHashMap;
 public class FKeyboardListener
 {
     private final Activity mActivity;
-
-    private InternalPopupWindow mPopupWindow;
-    private final Rect mRect = new Rect();
-
-    private int mWindowHeight;
-    private int mMaxWindowHeight;
-
-    /** 当前键盘高度 */
-    private int mKeyboardHeight;
-    /** 键盘可见时候的高度 */
-    private int mKeyboardVisibleHeight;
-    /** 缓存的键盘可见时候的高度 */
-    private static int sCachedKeyboardVisibleHeight;
-
+    private final FWindowKeyboardListener mKeyboardListener;
     private final Map<Callback, String> mCallbackHolder = new WeakHashMap<>();
 
     private FKeyboardListener(Activity activity)
@@ -48,6 +25,14 @@ public class FKeyboardListener
             throw new NullPointerException("activity is null");
 
         mActivity = activity;
+        mKeyboardListener = new FWindowKeyboardListener(activity)
+        {
+            @Override
+            protected void onKeyboardHeightChanged(int height)
+            {
+                FKeyboardListener.this.onKeyboardHeightChanged(height);
+            }
+        };
     }
 
     /**
@@ -83,7 +68,7 @@ public class FKeyboardListener
      */
     public int getKeyboardHeight()
     {
-        return mKeyboardHeight;
+        return mKeyboardListener.getKeyboardHeight();
     }
 
     /**
@@ -93,7 +78,7 @@ public class FKeyboardListener
      */
     public int getKeyboardVisibleHeight()
     {
-        return mKeyboardVisibleHeight;
+        return mKeyboardListener.getKeyboardVisibleHeight();
     }
 
     /**
@@ -103,108 +88,7 @@ public class FKeyboardListener
      */
     public static int getCachedKeyboardVisibleHeight()
     {
-        return sCachedKeyboardVisibleHeight;
-    }
-
-    private final ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener()
-    {
-        @Override
-        public void onGlobalLayout()
-        {
-            if (mPopupWindow == null)
-                return;
-
-            mPopupWindow.mView.getWindowVisibleDisplayFrame(mRect);
-
-            final int old = mWindowHeight;
-            final int height = mRect.height();
-            if (old != height)
-            {
-                mWindowHeight = height;
-                onWindowHeightChanged(height);
-
-                if (height > mMaxWindowHeight)
-                    mMaxWindowHeight = height;
-
-                final int oldKeyboardHeight = mKeyboardHeight;
-                final int keyboardHeight = mMaxWindowHeight - height;
-                if (oldKeyboardHeight != keyboardHeight)
-                {
-                    mKeyboardHeight = keyboardHeight;
-                    if (keyboardHeight > 0)
-                    {
-                        mKeyboardVisibleHeight = keyboardHeight;
-                        sCachedKeyboardVisibleHeight = keyboardHeight;
-                    }
-
-                    onKeyboardHeightChanged(keyboardHeight);
-                }
-            }
-        }
-    };
-
-    private View getTarget()
-    {
-        return mActivity.findViewById(Window.ID_ANDROID_CONTENT);
-    }
-
-    /**
-     * 开始监听
-     */
-    public final void start()
-    {
-        if (mActivity.isFinishing())
-            return;
-
-        final Application application = mActivity.getApplication();
-        application.unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
-        application.registerActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
-
-        getTarget().removeCallbacks(mShowRunnable);
-        getTarget().post(mShowRunnable);
-    }
-
-    /**
-     * 停止监听
-     */
-    public final void stop()
-    {
-        final Application application = mActivity.getApplication();
-        application.unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
-
-        getTarget().removeCallbacks(mShowRunnable);
-
-        if (mPopupWindow != null)
-        {
-            mPopupWindow.dismiss();
-            mPopupWindow = null;
-        }
-    }
-
-    private final Runnable mShowRunnable = new Runnable()
-    {
-        @Override
-        public void run()
-        {
-            if (mActivity.isFinishing())
-                return;
-
-            if (mPopupWindow == null)
-                mPopupWindow = new InternalPopupWindow(mActivity);
-
-            try
-            {
-                mPopupWindow.showAtLocation(getTarget(), Gravity.NO_GRAVITY, 0, 0);
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    private void onWindowHeightChanged(int height)
-    {
-        // private 暂不开放
+        return FWindowKeyboardListener.getCachedKeyboardVisibleHeight();
     }
 
     /**
@@ -221,38 +105,20 @@ public class FKeyboardListener
         }
     }
 
-    private final class InternalPopupWindow extends PopupWindow implements View.OnAttachStateChangeListener
+    /**
+     * 开始监听
+     */
+    public boolean start()
     {
-        private final View mView;
-
-        public InternalPopupWindow(Context context)
+        final Window window = mActivity.getWindow();
+        final boolean start = mKeyboardListener.start(window);
+        if (start)
         {
-            mView = new View(context);
-            mView.addOnAttachStateChangeListener(this);
-
-            setContentView(mView);
-            setWidth(1);
-            setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-            setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-            setInputMethodMode(INPUT_METHOD_NEEDED);
+            final Application application = mActivity.getApplication();
+            application.unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
+            application.registerActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
         }
-
-        @Override
-        public void onViewAttachedToWindow(View v)
-        {
-            final ViewTreeObserver observer = v.getViewTreeObserver();
-            if (observer.isAlive())
-                observer.addOnGlobalLayoutListener(mOnGlobalLayoutListener);
-        }
-
-        @Override
-        public void onViewDetachedFromWindow(View v)
-        {
-            final ViewTreeObserver observer = v.getViewTreeObserver();
-            if (observer.isAlive())
-                observer.removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
-        }
+        return start;
     }
 
     private final Application.ActivityLifecycleCallbacks mActivityLifecycleCallbacks = new Application.ActivityLifecycleCallbacks()
@@ -291,7 +157,10 @@ public class FKeyboardListener
         public void onActivityDestroyed(Activity activity)
         {
             if (mActivity == activity)
+            {
+                activity.getApplication().unregisterActivityLifecycleCallbacks(this);
                 removeActivity(activity);
+            }
         }
     };
 
@@ -319,11 +188,8 @@ public class FKeyboardListener
         if (listener == null)
         {
             listener = new FKeyboardListener(activity);
-            if (!activity.isFinishing())
-            {
+            if (listener.start())
                 MAP_LISTENER.put(activity, listener);
-                listener.start();
-            }
         }
         return listener;
     }
@@ -333,8 +199,6 @@ public class FKeyboardListener
         if (activity == null)
             return;
 
-        final FKeyboardListener listener = MAP_LISTENER.remove(activity);
-        if (listener != null)
-            listener.stop();
+        MAP_LISTENER.remove(activity);
     }
 }
