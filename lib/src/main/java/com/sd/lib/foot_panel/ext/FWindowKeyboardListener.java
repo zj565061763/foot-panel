@@ -227,7 +227,7 @@ public abstract class FWindowKeyboardListener
                 mMaxViewHeight = height;
 
             int keyboardHeight = mMaxViewHeight - height;
-            if (keyboardHeight > 0 && keyboardHeight <= 10)
+            if (keyboardHeight > 0 && keyboardHeight <= 100)
             {
                 // 如果键盘高度过小，则当作0处理
                 keyboardHeight = 0;
