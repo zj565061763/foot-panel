@@ -92,6 +92,16 @@ public class FKeyboardListener
     }
 
     /**
+     * 通知键盘高度变化
+     *
+     * @param height
+     */
+    public void notifyKeyboardHeight(int height)
+    {
+        mKeyboardListener.notifyKeyboardHeight(height);
+    }
+
+    /**
      * 键盘高度变化
      *
      * @param height

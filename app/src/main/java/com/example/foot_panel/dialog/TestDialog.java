@@ -8,6 +8,7 @@ import android.view.WindowManager;
 
 import com.example.foot_panel.R;
 import com.sd.lib.dialoger.impl.FDialoger;
+import com.sd.lib.foot_panel.ext.FKeyboardListener;
 import com.sd.lib.foot_panel.ext.FWindowKeyboardListener;
 
 public class TestDialog extends FDialoger
@@ -17,7 +18,7 @@ public class TestDialog extends FDialoger
     private View view_root;
     private final FWindowKeyboardListener mKeyboardListener;
 
-    public TestDialog(Activity activity)
+    public TestDialog(final Activity activity)
     {
         super(activity);
         setCanceledOnTouchOutside(false);
@@ -35,6 +36,7 @@ public class TestDialog extends FDialoger
             {
                 Log.i(TAG, "onKeyboardHeightChanged:" + height);
                 view_root.scrollTo(0, height);
+                FKeyboardListener.of(activity).notifyKeyboardHeight(height);
             }
 
             @Override

@@ -180,6 +180,23 @@ public abstract class FWindowKeyboardListener
     }
 
     /**
+     * 通知键盘高度
+     *
+     * @param height
+     */
+    public final void notifyKeyboardHeight(int height)
+    {
+        if (mKeyboardHeight != height)
+        {
+            mKeyboardHeight = height;
+            if (height > 0)
+                mKeyboardVisibleHeight = height;
+
+            onKeyboardHeightChanged(height);
+        }
+    }
+
+    /**
      * 键盘高度变化
      *
      * @param height
@@ -229,27 +246,24 @@ public abstract class FWindowKeyboardListener
         {
             mView.getWindowVisibleDisplayFrame(mRect);
 
-            final int height = mRect.height();
-            if (height > mMaxViewHeight)
-                mMaxViewHeight = height;
+            final int viewHeight = mRect.height();
+            if (viewHeight > mMaxViewHeight)
+                mMaxViewHeight = viewHeight;
 
-            int keyboardHeight = mMaxViewHeight - height;
+            int keyboardHeight = mMaxViewHeight - viewHeight;
             if (keyboardHeight > 0 && keyboardHeight <= 100)
             {
                 // 如果键盘高度过小，则当作0处理
                 keyboardHeight = 0;
             }
 
-            if (mKeyboardHeight != keyboardHeight)
+            if (keyboardHeight > 0)
             {
-                mKeyboardHeight = keyboardHeight;
-                if (keyboardHeight > 0)
-                {
-                    mKeyboardVisibleHeight = keyboardHeight;
-                    sCachedKeyboardVisibleHeight = keyboardHeight;
-                }
-                onKeyboardHeightChanged(keyboardHeight);
+                // 缓存键盘可见时候的高度
+                sCachedKeyboardVisibleHeight = keyboardHeight;
             }
+
+            notifyKeyboardHeight(keyboardHeight);
         }
     }
 }
