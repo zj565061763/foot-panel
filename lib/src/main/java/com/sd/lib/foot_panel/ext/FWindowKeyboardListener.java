@@ -75,22 +75,23 @@ public abstract class FWindowKeyboardListener
      *
      * @param window
      */
-    public final void start(Window window)
+    public final boolean start(Window window)
     {
         if (mActivity.isFinishing())
-            return;
+            return false;
 
         if (window == null)
-            return;
+            return false;
 
         final View target = window.getDecorView();
         if (target == null)
-            return;
+            return false;
 
         if (setTarget(target))
             hidePopupWindow();
 
         showPopupWindow(target);
+        return true;
     }
 
     private boolean setTarget(View target)
