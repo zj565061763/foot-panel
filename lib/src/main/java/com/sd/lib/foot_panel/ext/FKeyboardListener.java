@@ -118,7 +118,7 @@ public class FKeyboardListener
     /**
      * 开始监听
      */
-    public boolean start()
+    private boolean start()
     {
         final Window window = mActivity.getWindow();
         final boolean start = mKeyboardListener.start(window);
