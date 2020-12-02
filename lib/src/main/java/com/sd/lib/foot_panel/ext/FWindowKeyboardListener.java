@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -144,7 +145,7 @@ public abstract class FWindowKeyboardListener
      */
     private boolean showPopupWindow(View target)
     {
-        if (target == null)
+        if (!isAttached(target))
             return false;
 
         if (mActivity.isFinishing())
@@ -156,16 +157,8 @@ public abstract class FWindowKeyboardListener
         if (mPopupWindow == null)
             mPopupWindow = new InternalPopupWindow(mActivity);
 
-        try
-        {
-            mPopupWindow.showAtLocation(target, Gravity.NO_GRAVITY, 0, 0);
-            return true;
-        } catch (Exception e)
-        {
-            mPopupWindow = null;
-            e.printStackTrace();
-            return false;
-        }
+        mPopupWindow.showAtLocation(target, Gravity.NO_GRAVITY, 0, 0);
+        return true;
     }
 
     /**
@@ -274,5 +267,16 @@ public abstract class FWindowKeyboardListener
 
             notifyKeyboardHeight(keyboardHeight);
         }
+    }
+
+    private static boolean isAttached(View view)
+    {
+        if (view == null)
+            return false;
+
+        if (Build.VERSION.SDK_INT >= 19)
+            return view.isAttachedToWindow();
+        else
+            return view.getWindowToken() != null;
     }
 }
