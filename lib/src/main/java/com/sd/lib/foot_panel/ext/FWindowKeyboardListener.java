@@ -184,7 +184,7 @@ public abstract class FWindowKeyboardListener
      *
      * @param height
      */
-    public final void notifyKeyboardHeight(int height)
+    final void notifyKeyboardHeight(int height)
     {
         if (mKeyboardHeight != height)
         {
