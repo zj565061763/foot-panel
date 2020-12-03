@@ -176,7 +176,7 @@ public class FKeyboardListener
         if (keyboardListener.start(window))
         {
             if (mCheckWindowHolder == null)
-                mCheckWindowHolder = new HashMap<>();
+                mCheckWindowHolder = new WeakHashMap<>();
             mCheckWindowHolder.put(window, keyboardListener);
         }
     }

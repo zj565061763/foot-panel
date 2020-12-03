@@ -14,13 +14,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
+import java.lang.ref.WeakReference;
+
 /**
  * 键盘监听
  */
 public abstract class FWindowKeyboardListener
 {
     protected final Activity mActivity;
-    private View mTarget;
+    private WeakReference<View> mTarget;
 
     private InternalPopupWindow mPopupWindow;
     /** View最大高度 */
@@ -104,15 +106,20 @@ public abstract class FWindowKeyboardListener
         setTarget(null);
     }
 
+    private View getTarget()
+    {
+        return mTarget == null ? null : mTarget.get();
+    }
+
     private boolean setTarget(View target)
     {
-        final View old = mTarget;
+        final View old = getTarget();
         if (old != target)
         {
             if (old != null)
                 old.removeOnAttachStateChangeListener(mOnAttachStateChangeListener);
 
-            mTarget = target;
+            mTarget = target == null ? null : new WeakReference<>(target);
 
             if (target != null)
                 target.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
