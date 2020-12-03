@@ -2,6 +2,7 @@ package com.example.foot_panel;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,7 +32,14 @@ public class KeyboardActivity extends AppCompatActivity
 
         Log.i(TAG, "getCachedKeyboardVisibleHeight:" + FKeyboardListener.getCachedKeyboardVisibleHeight());
 
-        new TestDialog(this).show();
+        mBinding.btn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                new TestDialog(KeyboardActivity.this).show();
+            }
+        });
     }
 
     private final FKeyboardListener.Callback mCallback = new FKeyboardListener.Callback()
