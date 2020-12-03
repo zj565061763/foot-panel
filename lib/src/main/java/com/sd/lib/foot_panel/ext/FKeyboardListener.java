@@ -20,6 +20,8 @@ public class FKeyboardListener
     private final FWindowKeyboardListener mKeyboardListener;
     private final Map<Callback, String> mCallbackHolder = new WeakHashMap<>();
 
+    private Map<Window, FWindowKeyboardListener> mCheckWindowHolder;
+
     private FKeyboardListener(Activity activity)
     {
         if (activity == null)
@@ -31,7 +33,7 @@ public class FKeyboardListener
             @Override
             protected void onKeyboardHeightChanged(int height)
             {
-                FKeyboardListener.this.onKeyboardHeightChanged(height);
+                FKeyboardListener.this.notifyCallbacks(height);
             }
         };
     }
@@ -93,21 +95,11 @@ public class FKeyboardListener
     }
 
     /**
-     * 通知键盘高度变化
+     * 通知回调对象
      *
      * @param height
      */
-    public void notifyKeyboardHeight(int height)
-    {
-        mKeyboardListener.notifyKeyboardHeight(height);
-    }
-
-    /**
-     * 键盘高度变化
-     *
-     * @param height
-     */
-    private void onKeyboardHeightChanged(int height)
+    private void notifyCallbacks(int height)
     {
         final List<Callback> list = new ArrayList<>(mCallbackHolder.keySet());
         for (Callback item : list)
@@ -139,8 +131,54 @@ public class FKeyboardListener
     {
         mKeyboardListener.stop();
 
+        if (mCheckWindowHolder != null)
+        {
+            for (FWindowKeyboardListener item : mCheckWindowHolder.values())
+            {
+                item.stop();
+            }
+            mCheckWindowHolder.clear();
+            mCheckWindowHolder = null;
+        }
+
         final Application application = mActivity.getApplication();
         application.unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
+    }
+
+    /**
+     * 检查Window的键盘
+     *
+     * @param window
+     */
+    public void checkWindow(Window window)
+    {
+        if (window == null)
+            return;
+
+        if (mActivity.isFinishing())
+            return;
+
+        if (mActivity.getWindow() == window)
+            throw new IllegalArgumentException("window must not be Activity's window");
+
+        if (mCheckWindowHolder != null && mCheckWindowHolder.containsKey(window))
+            return;
+
+        final FWindowKeyboardListener keyboardListener = new FWindowKeyboardListener(mActivity)
+        {
+            @Override
+            protected void onKeyboardHeightChanged(int height)
+            {
+                mKeyboardListener.notifyKeyboardHeight(height);
+            }
+        };
+
+        if (keyboardListener.start(window))
+        {
+            if (mCheckWindowHolder == null)
+                mCheckWindowHolder = new HashMap<>();
+            mCheckWindowHolder.put(window, keyboardListener);
+        }
     }
 
     private final Application.ActivityLifecycleCallbacks mActivityLifecycleCallbacks = new Application.ActivityLifecycleCallbacks()
