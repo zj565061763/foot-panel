@@ -1,38 +1,27 @@
-package com.example.foot_panel;
+package com.example.foot_panel
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import com.example.foot_panel.databinding.ActivityMainBinding
 
-import androidx.appcompat.app.AppCompatActivity;
+class MainActivity : AppCompatActivity(), View.OnClickListener {
+    private lateinit var _binding: ActivityMainBinding
 
-import com.example.foot_panel.databinding.ActivityMainBinding;
-import com.example.foot_panel.dialog.TestDialog;
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener
-{
-    private ActivityMainBinding mBinding;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        mBinding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(mBinding.getRoot());
-
-        mBinding.btnKeyboard.setOnClickListener(this);
-        mBinding.btnFootPanel.setOnClickListener(this);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(_binding.root)
+        _binding.btnKeyboard.setOnClickListener(this)
+        _binding.btnFootPanel.setOnClickListener(this)
     }
 
-    @Override
-    public void onClick(View v)
-    {
-        if (v == mBinding.btnKeyboard)
-        {
-            startActivity(new Intent(this, KeyboardActivity.class));
-        } else if (v == mBinding.btnFootPanel)
-        {
-            startActivity(new Intent(this, FootPanelActivity.class));
+    override fun onClick(v: View) {
+        when (v) {
+            _binding.btnKeyboard -> startActivity(Intent(this, KeyboardActivity::class.java))
+            _binding.btnFootPanel -> startActivity(Intent(this, FootPanelActivity::class.java))
+            _binding.btnScroll -> startActivity(Intent(this, ScrollActivity::class.java))
         }
     }
 }

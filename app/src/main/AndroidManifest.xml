@@ -24,6 +24,10 @@
         <activity
             android:name=".FootPanelActivity"
             android:windowSoftInputMode="adjustNothing" />
+        
+        <activity
+            android:name=".ScrollActivity"
+            android:windowSoftInputMode="adjustNothing" />
 
     </application>
 
