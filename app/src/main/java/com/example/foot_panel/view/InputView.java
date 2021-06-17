@@ -77,7 +77,7 @@ public class InputView extends FrameLayout implements View.OnClickListener {
     private InputMoreView getMoreView() {
         if (mMoreView == null) {
             mMoreView = new InputMoreView(getContext());
-            // 同步键盘高度给更多View
+            // 同步键盘高度给View
             getKeyboardHeightKeeper().addView(mMoreView);
         }
         return mMoreView;
