@@ -30,16 +30,16 @@ class KeyboardActivity : AppCompatActivity(), View.OnClickListener {
     private val _windowKeyboardListener = object : FWindowKeyboardListener() {
         override fun onStart() {
             super.onStart()
-            Log.i(TAG, "window onStart")
+            Log.i(TAG, "listener onStart")
         }
 
         override fun onStop() {
             super.onStop()
-            Log.i(TAG, "window onStop")
+            Log.i(TAG, "listener onStop")
         }
 
         override fun onKeyboardHeightChanged(height: Int) {
-            Log.i(TAG, "window onKeyboardHeightChanged height:${height}")
+            Log.i(TAG, "listener onKeyboardHeightChanged height:${height}")
         }
     }
 
