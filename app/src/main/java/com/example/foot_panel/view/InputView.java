@@ -124,7 +124,6 @@ public class InputView extends FrameLayout implements View.OnClickListener {
         @Override
         protected void onFootHeightChanged(int height) {
             Log.i(TAG, "onFootHeightChanged height:" + height);
-
             if (getCurrentFootPanel() == mKeyboardPanel) {
                 if (height > 0) {
                     showModeKeyboard();
