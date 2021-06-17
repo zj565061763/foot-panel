@@ -1,5 +1,7 @@
 package com.sd.lib.foot_panel;
 
+import androidx.annotation.NonNull;
+
 import com.sd.lib.foot_panel.panel.IFootPanel;
 import com.sd.lib.foot_panel.panel.KeyboardFootPanel;
 
@@ -17,8 +19,6 @@ public abstract class FootPanelListener {
 
     /**
      * 是否已经开始监听
-     *
-     * @return
      */
     public final boolean isStarted() {
         return mIsStarted;
@@ -26,8 +26,6 @@ public abstract class FootPanelListener {
 
     /**
      * 返回当前底部高度
-     *
-     * @return
      */
     public final int getFootHeight() {
         return mFootHeight;
@@ -35,8 +33,6 @@ public abstract class FootPanelListener {
 
     /**
      * 返回当前底部面板
-     *
-     * @return
      */
     public final IFootPanel getCurrentFootPanel() {
         return mCurrentFootPanel;
@@ -45,7 +41,7 @@ public abstract class FootPanelListener {
     /**
      * 开始监听
      */
-    public void start() {
+    public final void start() {
         if (!mIsStarted) {
             mIsStarted = true;
             notifyHeightChanged();
@@ -55,20 +51,14 @@ public abstract class FootPanelListener {
     /**
      * 停止监听
      */
-    public void stop() {
+    public final void stop() {
         mIsStarted = false;
     }
 
     /**
      * 添加底部面板
-     *
-     * @param panel
      */
-    public void addFootPanel(final IFootPanel panel) {
-        if (panel == null) {
-            return;
-        }
-
+    public final void addFootPanel(@NonNull final IFootPanel panel) {
         if (mMapFootPanel.containsKey(panel)) {
             return;
         }
@@ -99,8 +89,6 @@ public abstract class FootPanelListener {
 
     /**
      * 移除底部面板
-     *
-     * @param panel
      */
     public void removeFootPanel(final IFootPanel panel) {
         final IFootPanel.HeightChangeCallback callback = mMapFootPanel.remove(panel);
@@ -119,8 +107,6 @@ public abstract class FootPanelListener {
 
     /**
      * 设置当前底部面板
-     *
-     * @param panel
      */
     public void setCurrentFootPanel(IFootPanel panel) {
         if (panel == null) {
@@ -141,16 +127,13 @@ public abstract class FootPanelListener {
 
     /**
      * 设置底部高度
-     *
-     * @param height
      */
     private void setFootHeight(int height) {
         if (height < 0) {
             height = 0;
         }
 
-        final int old = mFootHeight;
-        if (old != height) {
+        if (mFootHeight != height) {
             mFootHeight = height;
             notifyHeightChanged();
         }
@@ -167,8 +150,6 @@ public abstract class FootPanelListener {
 
     /**
      * 底部高度变化
-     *
-     * @param height
      */
     protected abstract void onFootHeightChanged(int height);
 }
