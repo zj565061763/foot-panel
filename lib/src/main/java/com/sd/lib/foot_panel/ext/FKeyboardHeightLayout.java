@@ -6,8 +6,6 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
-
 /**
  * 高度为键盘高度的布局
  */
@@ -31,8 +29,7 @@ public class FKeyboardHeightLayout extends FrameLayout {
         mActivity = (Activity) context;
     }
 
-    @NonNull
-    public final FKeyboardListener getKeyboardListener() {
+    private FKeyboardListener getKeyboardListener() {
         return FKeyboardListener.of(mActivity);
     }
 

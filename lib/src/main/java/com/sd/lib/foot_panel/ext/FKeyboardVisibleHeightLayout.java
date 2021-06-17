@@ -17,8 +17,8 @@ public class FKeyboardVisibleHeightLayout extends FKeyboardHeightLayout {
 
     @Override
     protected int getKeyboardHeight() {
-        int height = getKeyboardListener().getKeyboardVisibleHeight();
-        if (height == 0) {
+        int height = super.getKeyboardHeight();
+        if (height <= 0) {
             height = FKeyboardListener.getCachedKeyboardVisibleHeight();
         }
         return height;
