@@ -95,16 +95,18 @@ public abstract class FootPanelListener {
      */
     public void removeFootPanel(@NonNull IFootPanel panel) {
         final IFootPanel.HeightChangeCallback callback = mMapFootPanel.remove(panel);
-        if (callback != null) {
-            if (mKeyboardFootPanel == panel) {
-                mKeyboardFootPanel = null;
-            }
+        if (callback == null) {
+            return;
+        }
 
-            panel.releasePanel();
+        if (mKeyboardFootPanel == panel) {
+            mKeyboardFootPanel = null;
+        }
 
-            if (mCurrentFootPanel == panel) {
-                setCurrentFootPanel(null);
-            }
+        panel.releasePanel();
+
+        if (mCurrentFootPanel == panel) {
+            setCurrentFootPanel(null);
         }
     }
 
