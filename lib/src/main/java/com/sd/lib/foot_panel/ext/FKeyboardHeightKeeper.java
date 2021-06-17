@@ -5,6 +5,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -20,10 +22,7 @@ public class FKeyboardHeightKeeper {
     private int mViewHeight = 0;
     private int mMinHeight = -1;
 
-    public FKeyboardHeightKeeper(Activity activity) {
-        if (activity == null) {
-            throw new NullPointerException("activity is null");
-        }
+    public FKeyboardHeightKeeper(@NonNull Activity activity) {
         mActivity = activity;
     }
 
@@ -46,8 +45,6 @@ public class FKeyboardHeightKeeper {
      * 设置最小高度
      * <p>
      * 如果键盘高度小于最小高度，则View的高度自动切换为{@link ViewGroup.LayoutParams#WRAP_CONTENT}
-     *
-     * @param minHeight
      */
     public void setMinHeight(int minHeight) {
         if (mMinHeight != minHeight) {
@@ -58,14 +55,8 @@ public class FKeyboardHeightKeeper {
 
     /**
      * 添加View
-     *
-     * @param view
      */
-    public void addView(View view) {
-        if (view == null) {
-            return;
-        }
-
+    public void addView(@NonNull View view) {
         if (mViewHolder.containsKey(view)) {
             return;
         }
@@ -74,7 +65,7 @@ public class FKeyboardHeightKeeper {
         mViewHolder.put(view, config);
 
         int height = getKeyboardListener().getKeyboardVisibleHeight();
-        if (height == 0) {
+        if (height <= 0) {
             height = FKeyboardListener.getCachedKeyboardVisibleHeight();
         }
 
@@ -88,15 +79,11 @@ public class FKeyboardHeightKeeper {
 
     /**
      * 移除View
-     *
-     * @param view
      */
     public void removeView(View view) {
-        if (view == null) {
-            return;
+        if (view != null) {
+            mViewHolder.remove(view);
         }
-
-        mViewHolder.remove(view);
     }
 
     /**
