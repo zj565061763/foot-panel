@@ -20,10 +20,9 @@ import java.lang.ref.WeakReference;
  * 键盘监听
  */
 public abstract class FWindowKeyboardListener {
-    protected final Activity mActivity;
+    private InternalPopupWindow mPopupWindow;
     private WeakReference<View> mTarget;
 
-    private InternalPopupWindow mPopupWindow;
     /** View最大高度 */
     private int mMaxViewHeight;
 
@@ -34,27 +33,15 @@ public abstract class FWindowKeyboardListener {
     /** 缓存的键盘可见时候的高度 */
     private static int sCachedKeyboardVisibleHeight;
 
-    public FWindowKeyboardListener(Activity activity) {
-        if (activity == null) {
-            throw new NullPointerException("activity is null");
-        }
-
-        mActivity = activity;
-    }
-
     /**
-     * 返回当前软键盘高度，如果当前软键盘不可见，则返回0
-     *
-     * @return
+     * 当前键盘高度
      */
     public int getKeyboardHeight() {
         return mKeyboardHeight;
     }
 
     /**
-     * 返回软键盘可见时候的高度
-     *
-     * @return
+     * 键盘可见时候的高度
      */
     public int getKeyboardVisibleHeight() {
         return mKeyboardVisibleHeight;
@@ -62,8 +49,6 @@ public abstract class FWindowKeyboardListener {
 
     /**
      * 缓存的键盘可见时候的高度
-     *
-     * @return
      */
     public static int getCachedKeyboardVisibleHeight() {
         return sCachedKeyboardVisibleHeight;
@@ -71,14 +56,8 @@ public abstract class FWindowKeyboardListener {
 
     /**
      * 开始监听
-     *
-     * @param window
      */
     public final boolean start(Window window) {
-        if (mActivity.isFinishing()) {
-            return false;
-        }
-
         if (window == null) {
             return false;
         }
@@ -88,11 +67,15 @@ public abstract class FWindowKeyboardListener {
             return false;
         }
 
+        if (isFinishing(target)) {
+            return false;
+        }
+
         if (setTarget(target)) {
             hidePopupWindow();
         }
 
-        showPopupWindow(target);
+        showPopupWindow();
         return true;
     }
 
@@ -120,7 +103,6 @@ public abstract class FWindowKeyboardListener {
             if (target != null) {
                 target.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
             }
-
             return true;
         }
         return false;
@@ -129,7 +111,7 @@ public abstract class FWindowKeyboardListener {
     private final View.OnAttachStateChangeListener mOnAttachStateChangeListener = new View.OnAttachStateChangeListener() {
         @Override
         public void onViewAttachedToWindow(View v) {
-            showPopupWindow(v);
+            showPopupWindow();
         }
 
         @Override
@@ -140,16 +122,14 @@ public abstract class FWindowKeyboardListener {
 
     /**
      * 显示PopupWindow
-     *
-     * @param target
-     * @return
      */
-    private boolean showPopupWindow(View target) {
+    private boolean showPopupWindow() {
+        final View target = getTarget();
         if (!isAttached(target)) {
             return false;
         }
 
-        if (mActivity.isFinishing()) {
+        if (isFinishing(target)) {
             return false;
         }
 
@@ -158,7 +138,7 @@ public abstract class FWindowKeyboardListener {
         }
 
         if (mPopupWindow == null) {
-            mPopupWindow = new InternalPopupWindow(mActivity);
+            mPopupWindow = new InternalPopupWindow(target.getContext());
         }
 
         mPopupWindow.showAtLocation(target, Gravity.NO_GRAVITY, 0, 0);
@@ -183,8 +163,6 @@ public abstract class FWindowKeyboardListener {
 
     /**
      * 通知键盘高度
-     *
-     * @param height
      */
     final void notifyKeyboardHeight(int height) {
         if (mKeyboardHeight != height) {
@@ -192,15 +170,12 @@ public abstract class FWindowKeyboardListener {
             if (height > 0) {
                 mKeyboardVisibleHeight = height;
             }
-
             onKeyboardHeightChanged(height);
         }
     }
 
     /**
      * 键盘高度变化
-     *
-     * @param height
      */
     protected abstract void onKeyboardHeightChanged(int height);
 
@@ -226,7 +201,6 @@ public abstract class FWindowKeyboardListener {
             if (observer.isAlive()) {
                 observer.addOnGlobalLayoutListener(InternalPopupWindow.this);
             }
-
             FWindowKeyboardListener.this.onStart();
         }
 
@@ -236,7 +210,6 @@ public abstract class FWindowKeyboardListener {
             if (observer.isAlive()) {
                 observer.removeOnGlobalLayoutListener(InternalPopupWindow.this);
             }
-
             FWindowKeyboardListener.this.onStop();
         }
 
@@ -268,11 +241,19 @@ public abstract class FWindowKeyboardListener {
         if (view == null) {
             return false;
         }
-
         if (Build.VERSION.SDK_INT >= 19) {
             return view.isAttachedToWindow();
         } else {
             return view.getWindowToken() != null;
         }
+    }
+
+    private static boolean isFinishing(View view) {
+        final Context context = view.getContext();
+        if (context instanceof Activity) {
+            final Activity activity = (Activity) context;
+            return activity.isFinishing();
+        }
+        return false;
     }
 }

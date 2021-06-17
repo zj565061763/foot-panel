@@ -5,6 +5,8 @@ import android.app.Application;
 import android.os.Bundle;
 import android.view.Window;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,13 +23,9 @@ public class FKeyboardListener {
 
     private Map<Window, FWindowKeyboardListener> mCheckWindowHolder;
 
-    private FKeyboardListener(Activity activity) {
-        if (activity == null) {
-            throw new NullPointerException("activity is null");
-        }
-
+    private FKeyboardListener(@NonNull Activity activity) {
         mActivity = activity;
-        mKeyboardListener = new FWindowKeyboardListener(activity) {
+        mKeyboardListener = new FWindowKeyboardListener() {
             @Override
             protected void onKeyboardHeightChanged(int height) {
                 FKeyboardListener.this.notifyCallbacks(height);
@@ -37,43 +35,31 @@ public class FKeyboardListener {
 
     /**
      * 添加回调，内部用弱引用保存
-     *
-     * @param callback
      */
     public void addCallback(Callback callback) {
-        if (callback == null) {
-            return;
+        if (callback != null) {
+            mCallbackHolder.put(callback, "");
         }
-
-        mCallbackHolder.put(callback, "");
     }
 
     /**
      * 移除回调
-     *
-     * @param callback
      */
     public void removeCallback(Callback callback) {
-        if (callback == null) {
-            return;
+        if (callback != null) {
+            mCallbackHolder.remove(callback);
         }
-
-        mCallbackHolder.remove(callback);
     }
 
     /**
-     * 返回当前软键盘高度，如果当前软键盘不可见，则返回0
-     *
-     * @return
+     * 当前键盘高度
      */
     public int getKeyboardHeight() {
         return mKeyboardListener.getKeyboardHeight();
     }
 
     /**
-     * 返回软键盘可见时候的高度
-     *
-     * @return
+     * 键盘可见时候的高度
      */
     public int getKeyboardVisibleHeight() {
         return mKeyboardListener.getKeyboardVisibleHeight();
@@ -81,8 +67,6 @@ public class FKeyboardListener {
 
     /**
      * 缓存的键盘可见时候的高度
-     *
-     * @return
      */
     public static int getCachedKeyboardVisibleHeight() {
         return FWindowKeyboardListener.getCachedKeyboardVisibleHeight();
@@ -90,8 +74,6 @@ public class FKeyboardListener {
 
     /**
      * 通知回调对象
-     *
-     * @param height
      */
     private void notifyCallbacks(int height) {
         final List<Callback> list = new ArrayList<>(mCallbackHolder.keySet());
@@ -154,7 +136,7 @@ public class FKeyboardListener {
             return;
         }
 
-        final FWindowKeyboardListener keyboardListener = new FWindowKeyboardListener(mActivity) {
+        final FWindowKeyboardListener keyboardListener = new FWindowKeyboardListener() {
             @Override
             protected void onKeyboardHeightChanged(int height) {
                 mKeyboardListener.notifyKeyboardHeight(height);
@@ -205,9 +187,6 @@ public class FKeyboardListener {
     public interface Callback {
         /**
          * 键盘高度变化回调
-         *
-         * @param height
-         * @param listener
          */
         void onKeyboardHeightChanged(int height, FKeyboardListener listener);
     }
