@@ -155,12 +155,6 @@ public abstract class FWindowKeyboardListener {
         }
     }
 
-    protected void onStart() {
-    }
-
-    protected void onStop() {
-    }
-
     /**
      * 通知键盘高度
      */
@@ -172,6 +166,18 @@ public abstract class FWindowKeyboardListener {
             }
             onKeyboardHeightChanged(height);
         }
+    }
+
+    /**
+     * 开始监听
+     */
+    protected void onStart() {
+    }
+
+    /**
+     * 停止监听
+     */
+    protected void onStop() {
     }
 
     /**
