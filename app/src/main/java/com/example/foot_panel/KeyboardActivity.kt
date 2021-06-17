@@ -6,7 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foot_panel.databinding.ActivityKeyboardBinding
 import com.example.foot_panel.dialog.TestDialog
-import com.sd.lib.foot_panel.ext.FWindowKeyboardListener
+import com.sd.lib.foot_panel.ext.FKeyboardListener
 
 /**
  * 软键盘监听
@@ -20,26 +20,16 @@ class KeyboardActivity : AppCompatActivity(), View.OnClickListener {
         _binding = ActivityKeyboardBinding.inflate(layoutInflater)
         setContentView(_binding.root)
 
-        // 监听当前window
-        _windowKeyboardListener.start(window)
+        // 监听当前Activity
+        FKeyboardListener.of(this).addCallback(_keyboardCallback)
     }
 
     /**
-     * 监听键盘高度
+     * 键盘高度回调
      */
-    private val _windowKeyboardListener = object : FWindowKeyboardListener() {
-        override fun onStart() {
-            super.onStart()
-            Log.i(TAG, "listener onStart")
-        }
-
-        override fun onStop() {
-            super.onStop()
-            Log.i(TAG, "listener onStop")
-        }
-
-        override fun onKeyboardHeightChanged(height: Int) {
-            Log.i(TAG, "listener onKeyboardHeightChanged height:${height}")
+    private val _keyboardCallback = object : FKeyboardListener.Callback {
+        override fun onKeyboardHeightChanged(height: Int, listener: FKeyboardListener) {
+            Log.i(TAG, "onKeyboardHeightChanged height:${height}")
         }
     }
 
