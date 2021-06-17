@@ -1,5 +1,7 @@
 package com.sd.lib.foot_panel.panel;
 
+import androidx.annotation.NonNull;
+
 import java.lang.ref.WeakReference;
 
 public abstract class BaseFootPanel implements IFootPanel {
@@ -10,7 +12,7 @@ public abstract class BaseFootPanel implements IFootPanel {
     }
 
     @Override
-    public void initPanel(HeightChangeCallback callback) {
+    public void initPanel(@NonNull HeightChangeCallback callback) {
         mHeightChangeCallback = new WeakReference<>(callback);
     }
 
