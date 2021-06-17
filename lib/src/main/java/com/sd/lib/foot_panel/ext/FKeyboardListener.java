@@ -195,11 +195,7 @@ public class FKeyboardListener {
 
     private static final Map<Activity, FKeyboardListener> MAP_LISTENER = new HashMap<>();
 
-    public static synchronized FKeyboardListener of(Activity activity) {
-        if (activity == null) {
-            return null;
-        }
-
+    public static synchronized FKeyboardListener of(@NonNull Activity activity) {
         FKeyboardListener listener = MAP_LISTENER.get(activity);
         if (listener == null) {
             listener = new FKeyboardListener(activity);
@@ -210,11 +206,7 @@ public class FKeyboardListener {
         return listener;
     }
 
-    private static synchronized void removeActivity(Activity activity) {
-        if (activity == null) {
-            return;
-        }
-
+    private static synchronized void removeActivity(@NonNull Activity activity) {
         final FKeyboardListener listener = MAP_LISTENER.remove(activity);
         if (listener != null) {
             listener.stop();
