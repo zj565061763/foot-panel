@@ -18,23 +18,15 @@ import java.util.WeakHashMap;
  */
 public class FKeyboardListener {
     private final Activity mActivity;
-    private final FWindowKeyboardListener mKeyboardListener;
     private final Map<Callback, String> mCallbackHolder = new WeakHashMap<>();
-
     private Map<Window, FWindowKeyboardListener> mCheckWindowHolder;
 
     private FKeyboardListener(@NonNull Activity activity) {
         mActivity = activity;
-        mKeyboardListener = new FWindowKeyboardListener() {
-            @Override
-            protected void onKeyboardHeightChanged(int height) {
-                FKeyboardListener.this.notifyCallbacks(height);
-            }
-        };
     }
 
     /**
-     * 添加回调，内部用弱引用保存
+     * 添加回调，弱引用保存
      */
     public void addCallback(Callback callback) {
         if (callback != null) {
@@ -55,14 +47,14 @@ public class FKeyboardListener {
      * 当前键盘高度
      */
     public int getKeyboardHeight() {
-        return mKeyboardListener.getKeyboardHeight();
+        return mWindowKeyboardListener.getKeyboardHeight();
     }
 
     /**
      * 键盘可见时候的高度
      */
     public int getKeyboardVisibleHeight() {
-        return mKeyboardListener.getKeyboardVisibleHeight();
+        return mWindowKeyboardListener.getKeyboardVisibleHeight();
     }
 
     /**
@@ -73,21 +65,24 @@ public class FKeyboardListener {
     }
 
     /**
-     * 通知回调对象
+     * 键盘高度监听
      */
-    private void notifyCallbacks(int height) {
-        final List<Callback> list = new ArrayList<>(mCallbackHolder.keySet());
-        for (Callback item : list) {
-            item.onKeyboardHeightChanged(height, this);
+    private final FWindowKeyboardListener mWindowKeyboardListener = new FWindowKeyboardListener() {
+        @Override
+        protected void onKeyboardHeightChanged(int height) {
+            final List<Callback> list = new ArrayList<>(mCallbackHolder.keySet());
+            for (Callback item : list) {
+                item.onKeyboardHeightChanged(height, FKeyboardListener.this);
+            }
         }
-    }
+    };
 
     /**
      * 开始监听
      */
     private boolean start() {
         final Window window = mActivity.getWindow();
-        final boolean start = mKeyboardListener.start(window);
+        final boolean start = mWindowKeyboardListener.start(window);
         if (start) {
             final Application application = mActivity.getApplication();
             application.unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
@@ -100,7 +95,7 @@ public class FKeyboardListener {
      * 停止监听
      */
     private void stop() {
-        mKeyboardListener.stop();
+        mWindowKeyboardListener.stop();
 
         if (mCheckWindowHolder != null) {
             for (FWindowKeyboardListener item : mCheckWindowHolder.values()) {
@@ -139,7 +134,7 @@ public class FKeyboardListener {
         final FWindowKeyboardListener keyboardListener = new FWindowKeyboardListener() {
             @Override
             protected void onKeyboardHeightChanged(int height) {
-                mKeyboardListener.notifyKeyboardHeight(height);
+                mWindowKeyboardListener.notifyKeyboardHeight(height);
             }
         };
 
