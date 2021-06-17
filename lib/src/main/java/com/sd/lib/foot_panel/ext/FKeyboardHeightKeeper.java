@@ -69,11 +69,6 @@ public class FKeyboardHeightKeeper {
             height = FKeyboardListener.getCachedKeyboardVisibleHeight();
         }
 
-        // 检查最小高度
-        if (height < getMinHeight()) {
-            height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        }
-
         config.updateHeight(height);
     }
 
@@ -91,7 +86,7 @@ public class FKeyboardHeightKeeper {
      */
     private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback() {
         @Override
-        public void onKeyboardHeightChanged(int height, FKeyboardListener listener) {
+        public void onKeyboardHeightChanged(int height, @NonNull FKeyboardListener listener) {
             notifyHeight(height);
         }
     };
@@ -99,11 +94,6 @@ public class FKeyboardHeightKeeper {
     private void notifyHeight(int height) {
         if (height <= 0) {
             return;
-        }
-
-        // 检查最小高度
-        if (height < getMinHeight()) {
-            height = ViewGroup.LayoutParams.WRAP_CONTENT;
         }
 
         if (mViewHeight != height) {
@@ -117,27 +107,27 @@ public class FKeyboardHeightKeeper {
     private final class ViewConfig {
         private final WeakReference<View> mView;
 
-        private ViewConfig(View view) {
-            if (view == null) {
-                throw new NullPointerException("view is null");
-            }
+        private ViewConfig(@NonNull View view) {
             mView = new WeakReference<>(view);
         }
 
         public void updateHeight(int height) {
-            if (height == 0) {
-                return;
-            }
-
             final View view = mView.get();
             if (view == null) {
                 return;
             }
 
-            ViewGroup.LayoutParams params = view.getLayoutParams();
+            if (height <= 0) {
+                return;
+            }
+
+            if (height < getMinHeight()) {
+                height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            }
+
+            final ViewGroup.LayoutParams params = view.getLayoutParams();
             if (params == null) {
-                params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
-                updateViewHeight(view, params);
+                updateViewHeight(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
                 return;
             }
 
@@ -148,6 +138,9 @@ public class FKeyboardHeightKeeper {
         }
     }
 
+    /**
+     * 更新View的高度
+     */
     protected void updateViewHeight(View view, ViewGroup.LayoutParams params) {
         view.setLayoutParams(params);
     }
