@@ -10,6 +10,8 @@ import android.widget.FrameLayout;
  * 高度为键盘高度的布局
  */
 public class FKeyboardHeightLayout extends FrameLayout {
+    private Activity mActivity;
+
     public FKeyboardHeightLayout(Context context) {
         super(context);
         init(context);
@@ -20,17 +22,16 @@ public class FKeyboardHeightLayout extends FrameLayout {
         init(context);
     }
 
-    private Activity mActivity;
-
     private void init(Context context) {
-        if (!(context instanceof Activity)) {
+        if (context instanceof Activity) {
+            mActivity = (Activity) context;
+        } else {
             throw new IllegalArgumentException("context must be instance of " + Activity.class.getName());
         }
-        mActivity = (Activity) context;
     }
 
-    private FKeyboardListener getKeyboardListener() {
-        return FKeyboardListener.of(mActivity);
+    protected int getKeyboardHeight() {
+        return FKeyboardListener.of(mActivity).getKeyboardHeight();
     }
 
     /**
@@ -42,10 +43,6 @@ public class FKeyboardHeightLayout extends FrameLayout {
             updateViewHeight();
         }
     };
-
-    protected int getKeyboardHeight() {
-        return getKeyboardListener().getKeyboardHeight();
-    }
 
     private void updateViewHeight() {
         final ViewGroup.LayoutParams params = getLayoutParams();
@@ -71,13 +68,13 @@ public class FKeyboardHeightLayout extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        getKeyboardListener().addCallback(mKeyboardCallback);
         updateViewHeight();
+        FKeyboardListener.of(mActivity).addCallback(mKeyboardCallback);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        getKeyboardListener().removeCallback(mKeyboardCallback);
+        FKeyboardListener.of(mActivity).removeCallback(mKeyboardCallback);
     }
 }
