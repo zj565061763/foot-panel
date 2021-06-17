@@ -24,6 +24,6 @@ public interface IFootPanel {
         /**
          * 高度变化
          */
-        void onHeightChanged(int height);
+        void onHeightChanged(int height, @NonNull IFootPanel footPanel);
     }
 }

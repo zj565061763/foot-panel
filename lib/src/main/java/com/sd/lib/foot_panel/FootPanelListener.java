@@ -58,18 +58,20 @@ public abstract class FootPanelListener {
     /**
      * 添加底部面板
      */
-    public final void addFootPanel(@NonNull final IFootPanel panel) {
+    public final void addFootPanel(@NonNull IFootPanel panel) {
         if (mMapFootPanel.containsKey(panel)) {
             return;
         }
 
         final IFootPanel.HeightChangeCallback callback = new IFootPanel.HeightChangeCallback() {
             @Override
-            public void onHeightChanged(int height) {
-                if (panel == mKeyboardFootPanel && height > 0) {
-                    // 如果软键盘弹出，则自动设置当前面板为软键盘面板
-                    setCurrentFootPanel(mKeyboardFootPanel);
-                } else if (panel == mCurrentFootPanel) {
+            public void onHeightChanged(int height, @NonNull IFootPanel footPanel) {
+                if (footPanel == mKeyboardFootPanel) {
+                    if (height > 0) {
+                        // 如果软键盘弹出，则自动设置当前面板为软键盘面板
+                        setCurrentFootPanel(mKeyboardFootPanel);
+                    }
+                } else if (footPanel == mCurrentFootPanel) {
                     setFootHeight(height);
                 }
             }

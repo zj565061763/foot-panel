@@ -14,7 +14,7 @@ public abstract class BaseFootPanel implements IFootPanel {
     protected final void notifyHeight(int height) {
         final HeightChangeCallback callback = mHeightChangeCallback == null ? null : mHeightChangeCallback.get();
         if (callback != null) {
-            callback.onHeightChanged(height);
+            callback.onHeightChanged(height, this);
         } else {
             releasePanel();
         }
