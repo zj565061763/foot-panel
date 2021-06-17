@@ -21,8 +21,7 @@ import com.sd.lib.foot_panel.panel.KeyboardFootPanel;
 import com.sd.lib.foot_panel.panel.ViewFootPanel;
 import com.sd.lib.utils.FKeyboardUtil;
 
-public class InputView extends FrameLayout implements View.OnClickListener
-{
+public class InputView extends FrameLayout implements View.OnClickListener {
     public static final String TAG = InputView.class.getSimpleName();
 
     private final ViewInputBinding mBinding;
@@ -39,8 +38,7 @@ public class InputView extends FrameLayout implements View.OnClickListener
     /** 键盘高度保持 */
     private FKeyboardHeightKeeper mKeyboardHeightKeeper;
 
-    public InputView(@NonNull Context context, @Nullable AttributeSet attrs)
-    {
+    public InputView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         mBinding = ViewInputBinding.inflate(LayoutInflater.from(context), this, true);
 
@@ -56,15 +54,11 @@ public class InputView extends FrameLayout implements View.OnClickListener
         mBinding.btnMore.setOnClickListener(this);
     }
 
-    private FKeyboardHeightKeeper getKeyboardHeightKeeper()
-    {
-        if (mKeyboardHeightKeeper == null)
-        {
-            mKeyboardHeightKeeper = new FKeyboardHeightKeeper((Activity) getContext())
-            {
+    private FKeyboardHeightKeeper getKeyboardHeightKeeper() {
+        if (mKeyboardHeightKeeper == null) {
+            mKeyboardHeightKeeper = new FKeyboardHeightKeeper((Activity) getContext()) {
                 @Override
-                protected void updateViewHeight(View view, ViewGroup.LayoutParams params)
-                {
+                protected void updateViewHeight(View view, ViewGroup.LayoutParams params) {
                     Log.i(TAG, "updateViewHeight height:" + params.height + " view:" + view);
                     super.updateViewHeight(view, params);
                 }
@@ -73,17 +67,15 @@ public class InputView extends FrameLayout implements View.OnClickListener
         return mKeyboardHeightKeeper;
     }
 
-    private View getKeyboardView()
-    {
-        if (mKeyboardView == null)
+    private View getKeyboardView() {
+        if (mKeyboardView == null) {
             mKeyboardView = new FKeyboardVisibleHeightLayout(getContext());
+        }
         return mKeyboardView;
     }
 
-    private InputMoreView getMoreView()
-    {
-        if (mMoreView == null)
-        {
+    private InputMoreView getMoreView() {
+        if (mMoreView == null) {
             mMoreView = new InputMoreView(getContext());
             // 同步键盘高度给更多View
             getKeyboardHeightKeeper().addView(mMoreView);
@@ -92,13 +84,10 @@ public class InputView extends FrameLayout implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View v)
-    {
-        if (v == mBinding.btnMore)
-        {
+    public void onClick(View v) {
+        if (v == mBinding.btnMore) {
             showModeMore();
-        } else if (v == mBinding.etContent)
-        {
+        } else if (v == mBinding.etContent) {
             showModeKeyboard();
         }
     }
@@ -106,8 +95,7 @@ public class InputView extends FrameLayout implements View.OnClickListener
     /**
      * 显示更多模式
      */
-    private void showModeMore()
-    {
+    private void showModeMore() {
         mFootPanelListener.setCurrentFootPanel(mBottomPanel);
 
         mBinding.flBottomExtend.removeAllViews();
@@ -118,8 +106,7 @@ public class InputView extends FrameLayout implements View.OnClickListener
     /**
      * 显示键盘输入模式
      */
-    private void showModeKeyboard()
-    {
+    private void showModeKeyboard() {
         mBinding.flBottomExtend.removeAllViews();
         mBinding.flBottomExtend.addView(getKeyboardView());
         FKeyboardUtil.show(mBinding.etContent);
@@ -128,39 +115,34 @@ public class InputView extends FrameLayout implements View.OnClickListener
     /**
      * 移除底部扩展
      */
-    private void removeBottomExtend()
-    {
+    private void removeBottomExtend() {
         mFootPanelListener.setCurrentFootPanel(null);
         mBinding.flBottomExtend.removeAllViews();
     }
 
-    private final FootPanelListener mFootPanelListener = new FootPanelListener()
-    {
+    private final FootPanelListener mFootPanelListener = new FootPanelListener() {
         @Override
-        protected void onFootHeightChanged(int height)
-        {
+        protected void onFootHeightChanged(int height) {
             Log.i(TAG, "onFootHeightChanged height:" + height);
 
-            if (getCurrentFootPanel() == mKeyboardPanel)
-            {
-                if (height > 0)
+            if (getCurrentFootPanel() == mKeyboardPanel) {
+                if (height > 0) {
                     showModeKeyboard();
-                else
+                } else {
                     removeBottomExtend();
+                }
             }
         }
     };
 
     @Override
-    protected void onAttachedToWindow()
-    {
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mFootPanelListener.start();
     }
 
     @Override
-    protected void onDetachedFromWindow()
-    {
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mFootPanelListener.stop();
     }

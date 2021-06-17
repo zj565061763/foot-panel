@@ -13,14 +13,12 @@ import com.sd.lib.foot_panel.ext.FKeyboardListener;
 /**
  * 软键盘监听
  */
-public class KeyboardActivity extends AppCompatActivity
-{
+public class KeyboardActivity extends AppCompatActivity {
     private static final String TAG = KeyboardActivity.class.getSimpleName();
     private ActivityKeyboardBinding mBinding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = ActivityKeyboardBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
@@ -32,21 +30,17 @@ public class KeyboardActivity extends AppCompatActivity
 
         Log.i(TAG, "getCachedKeyboardVisibleHeight:" + FKeyboardListener.getCachedKeyboardVisibleHeight());
 
-        mBinding.btn.setOnClickListener(new View.OnClickListener()
-        {
+        mBinding.btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 new TestDialog(KeyboardActivity.this).show();
             }
         });
     }
 
-    private final FKeyboardListener.Callback mCallback = new FKeyboardListener.Callback()
-    {
+    private final FKeyboardListener.Callback mCallback = new FKeyboardListener.Callback() {
         @Override
-        public void onKeyboardHeightChanged(int height, FKeyboardListener listener)
-        {
+        public void onKeyboardHeightChanged(int height, FKeyboardListener listener) {
             Log.i(TAG, "onKeyboardHeightChanged height:" + height);
         }
     };

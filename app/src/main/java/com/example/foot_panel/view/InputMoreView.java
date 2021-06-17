@@ -6,12 +6,10 @@ import android.widget.FrameLayout;
 
 import com.example.foot_panel.databinding.ViewInputMoreBinding;
 
-public class InputMoreView extends FrameLayout
-{
+public class InputMoreView extends FrameLayout {
     private final ViewInputMoreBinding mBinding;
 
-    public InputMoreView(Context context)
-    {
+    public InputMoreView(Context context) {
         super(context);
         mBinding = ViewInputMoreBinding.inflate(LayoutInflater.from(context), this, true);
     }

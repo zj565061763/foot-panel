@@ -9,13 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.foot_panel.databinding.ActivityMainBinding;
 import com.example.foot_panel.dialog.TestDialog;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener
-{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityMainBinding mBinding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
@@ -25,13 +23,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v)
-    {
-        if (v == mBinding.btnKeyboard)
-        {
+    public void onClick(View v) {
+        if (v == mBinding.btnKeyboard) {
             startActivity(new Intent(this, KeyboardActivity.class));
-        } else if (v == mBinding.btnFootPanel)
-        {
+        } else if (v == mBinding.btnFootPanel) {
             startActivity(new Intent(this, FootPanelActivity.class));
         }
     }

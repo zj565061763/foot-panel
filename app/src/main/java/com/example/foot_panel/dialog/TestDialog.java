@@ -10,14 +10,12 @@ import com.example.foot_panel.R;
 import com.sd.lib.dialoger.impl.FDialoger;
 import com.sd.lib.foot_panel.ext.FKeyboardListener;
 
-public class TestDialog extends FDialoger
-{
+public class TestDialog extends FDialoger {
     private static final String TAG = TestDialog.class.getSimpleName();
 
     private View view_root;
 
-    public TestDialog(final Activity activity)
-    {
+    public TestDialog(final Activity activity) {
         super(activity);
         setCanceledOnTouchOutside(false);
         setPadding(0, 0, 0, 0);
@@ -32,24 +30,20 @@ public class TestDialog extends FDialoger
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
         FKeyboardListener.of(getOwnerActivity()).addCallback(mKeyboardCallback);
     }
 
     @Override
-    protected void onStop()
-    {
+    protected void onStop() {
         super.onStop();
         FKeyboardListener.of(getOwnerActivity()).addCallback(mKeyboardCallback);
     }
 
-    private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback()
-    {
+    private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback() {
         @Override
-        public void onKeyboardHeightChanged(int height, FKeyboardListener listener)
-        {
+        public void onKeyboardHeightChanged(int height, FKeyboardListener listener) {
             Log.i(TAG, "onKeyboardHeightChanged:" + height);
             view_root.scrollTo(0, height);
         }
