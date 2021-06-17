@@ -183,7 +183,7 @@ public class FKeyboardListener {
         /**
          * 键盘高度变化回调
          */
-        void onKeyboardHeightChanged(int height, FKeyboardListener listener);
+        void onKeyboardHeightChanged(int height, @NonNull FKeyboardListener listener);
     }
 
     //---------- static ----------
