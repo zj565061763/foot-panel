@@ -14,6 +14,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
+import androidx.annotation.NonNull;
+
 import java.lang.ref.WeakReference;
 
 /**
@@ -57,11 +59,7 @@ public abstract class FWindowKeyboardListener {
     /**
      * 开始监听
      */
-    public final boolean start(Window window) {
-        if (window == null) {
-            return false;
-        }
-
+    public final boolean start(@NonNull Window window) {
         final View target = window.getDecorView();
         if (target == null) {
             return false;
@@ -93,19 +91,20 @@ public abstract class FWindowKeyboardListener {
 
     private boolean setTarget(View target) {
         final View old = getTarget();
-        if (old != target) {
-            if (old != null) {
-                old.removeOnAttachStateChangeListener(mOnAttachStateChangeListener);
-            }
-
-            mTarget = target == null ? null : new WeakReference<>(target);
-
-            if (target != null) {
-                target.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
-            }
-            return true;
+        if (old == target) {
+            return false;
         }
-        return false;
+
+        if (old != null) {
+            old.removeOnAttachStateChangeListener(mOnAttachStateChangeListener);
+        }
+
+        mTarget = target == null ? null : new WeakReference<>(target);
+
+        if (target != null) {
+            target.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
+        }
+        return true;
     }
 
     private final View.OnAttachStateChangeListener mOnAttachStateChangeListener = new View.OnAttachStateChangeListener() {
