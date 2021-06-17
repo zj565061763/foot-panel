@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+
 /**
  * 高度为键盘高度的布局
  */
@@ -29,14 +31,18 @@ public class FKeyboardHeightLayout extends FrameLayout {
         mActivity = (Activity) context;
     }
 
+    @NonNull
     public final FKeyboardListener getKeyboardListener() {
         return FKeyboardListener.of(mActivity);
     }
 
+    /**
+     * 键盘高度回调
+     */
     private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback() {
         @Override
         public void onKeyboardHeightChanged(int height, FKeyboardListener listener) {
-            updateHeight();
+            updateViewHeight();
         }
     };
 
@@ -44,7 +50,7 @@ public class FKeyboardHeightLayout extends FrameLayout {
         return getKeyboardListener().getKeyboardHeight();
     }
 
-    private void updateHeight() {
+    private void updateViewHeight() {
         final ViewGroup.LayoutParams params = getLayoutParams();
         if (params == null) {
             return;
@@ -62,7 +68,6 @@ public class FKeyboardHeightLayout extends FrameLayout {
         if (params != null) {
             params.height = getKeyboardHeight();
         }
-
         super.setLayoutParams(params);
     }
 
@@ -70,7 +75,7 @@ public class FKeyboardHeightLayout extends FrameLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         getKeyboardListener().addCallback(mKeyboardCallback);
-        updateHeight();
+        updateViewHeight();
     }
 
     @Override
