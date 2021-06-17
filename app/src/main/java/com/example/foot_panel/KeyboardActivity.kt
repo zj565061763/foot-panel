@@ -6,7 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foot_panel.databinding.ActivityKeyboardBinding
 import com.example.foot_panel.dialog.TestDialog
-import com.sd.lib.foot_panel.ext.FKeyboardListener
+import com.sd.lib.foot_panel.ext.FWindowKeyboardListener
 
 /**
  * 软键盘监听
@@ -20,13 +20,27 @@ class KeyboardActivity : AppCompatActivity(), View.OnClickListener {
         _binding = ActivityKeyboardBinding.inflate(layoutInflater)
         setContentView(_binding.root)
 
-        // 由于[FKeyboardListener]内部采用弱引用保存回调对象，所以这边回调对象要强引用
-        FKeyboardListener.of(this).addCallback(_callback)
-        Log.i(TAG, "getCachedKeyboardVisibleHeight:" + FKeyboardListener.getCachedKeyboardVisibleHeight())
+        // 监听当前window
+        _windowKeyboardListener.start(window)
     }
 
-    private val _callback = FKeyboardListener.Callback { height, listener ->
-        Log.i(TAG, "onKeyboardHeightChanged height:${height}")
+    /**
+     * 监听键盘高度
+     */
+    private val _windowKeyboardListener = object : FWindowKeyboardListener() {
+        override fun onStart() {
+            super.onStart()
+            Log.i(TAG, "window onStart")
+        }
+
+        override fun onStop() {
+            super.onStop()
+            Log.i(TAG, "window onStop")
+        }
+
+        override fun onKeyboardHeightChanged(height: Int) {
+            Log.i(TAG, "window onKeyboardHeightChanged height:${height}")
+        }
     }
 
     override fun onClick(v: View?) {
