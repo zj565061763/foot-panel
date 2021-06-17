@@ -92,7 +92,7 @@ public abstract class FootPanelListener {
     /**
      * 移除底部面板
      */
-    public void removeFootPanel(final IFootPanel panel) {
+    public void removeFootPanel(@NonNull IFootPanel panel) {
         final IFootPanel.HeightChangeCallback callback = mMapFootPanel.remove(panel);
         if (callback != null) {
             if (mKeyboardFootPanel == panel) {
@@ -119,7 +119,6 @@ public abstract class FootPanelListener {
 
         if (mMapFootPanel.containsKey(panel)) {
             mCurrentFootPanel = panel;
-
             final int height = panel.getPanelHeight();
             if (height > 0) {
                 setFootHeight(height);
