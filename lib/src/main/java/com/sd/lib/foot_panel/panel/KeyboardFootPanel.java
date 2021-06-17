@@ -2,6 +2,8 @@ package com.sd.lib.foot_panel.panel;
 
 import android.app.Activity;
 
+import androidx.annotation.NonNull;
+
 import com.sd.lib.foot_panel.ext.FKeyboardListener;
 
 /**
@@ -11,28 +13,9 @@ public class KeyboardFootPanel extends BaseFootPanel {
     private final Activity mActivity;
     private FKeyboardListener mKeyboardListener;
 
-    public KeyboardFootPanel(Activity activity) {
-        if (activity == null) {
-            throw new NullPointerException("activity is null");
-        }
+    public KeyboardFootPanel(@NonNull Activity activity) {
         mActivity = activity;
     }
-
-    /**
-     * 监听软键盘
-     */
-    private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback() {
-        @Override
-        public void onKeyboardHeightChanged(int height, FKeyboardListener listener) {
-            final HeightChangeCallback callback = getHeightChangeCallback();
-            if (callback == null) {
-                releasePanel();
-                return;
-            }
-
-            callback.onHeightChanged(height);
-        }
-    };
 
     @Override
     public int getPanelHeight() {
@@ -48,6 +31,16 @@ public class KeyboardFootPanel extends BaseFootPanel {
             mKeyboardListener.addCallback(mKeyboardCallback);
         }
     }
+
+    /**
+     * 监听软键盘
+     */
+    private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback() {
+        @Override
+        public void onKeyboardHeightChanged(int height, FKeyboardListener listener) {
+            notifyHeight(height);
+        }
+    };
 
     @Override
     public void releasePanel() {
