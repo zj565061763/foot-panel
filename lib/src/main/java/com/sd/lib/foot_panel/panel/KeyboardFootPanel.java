@@ -24,7 +24,7 @@ public class KeyboardFootPanel extends BaseFootPanel {
     }
 
     @Override
-    public void initPanel(HeightChangeCallback callback) {
+    public void initPanel(@NonNull HeightChangeCallback callback) {
         super.initPanel(callback);
         if (mKeyboardListener == null) {
             mKeyboardListener = FKeyboardListener.of(mActivity);
@@ -37,7 +37,7 @@ public class KeyboardFootPanel extends BaseFootPanel {
      */
     private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback() {
         @Override
-        public void onKeyboardHeightChanged(int height, FKeyboardListener listener) {
+        public void onKeyboardHeightChanged(int height, @NonNull FKeyboardListener listener) {
             notifyHeight(height);
         }
     };

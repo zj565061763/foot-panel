@@ -20,7 +20,7 @@ public class ViewFootPanel extends BaseFootPanel {
     }
 
     @Override
-    public void initPanel(HeightChangeCallback callback) {
+    public void initPanel(@NonNull HeightChangeCallback callback) {
         super.initPanel(callback);
         mView.removeOnLayoutChangeListener(mOnLayoutChangeListener);
         mView.addOnLayoutChangeListener(mOnLayoutChangeListener);
