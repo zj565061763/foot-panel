@@ -19,7 +19,7 @@ import java.util.WeakHashMap;
 public class FKeyboardListener {
     private final Activity mActivity;
     private final Map<Callback, String> mCallbackHolder = new WeakHashMap<>();
-    private Map<Window, FWindowKeyboardListener> mCheckWindowHolder;
+    private final Map<Window, FWindowKeyboardListener> mCheckWindowHolder = new WeakHashMap<>();
 
     private FKeyboardListener(@NonNull Activity activity) {
         mActivity = activity;
@@ -97,13 +97,10 @@ public class FKeyboardListener {
     private void stop() {
         mWindowKeyboardListener.stop();
 
-        if (mCheckWindowHolder != null) {
-            for (FWindowKeyboardListener item : mCheckWindowHolder.values()) {
-                item.stop();
-            }
-            mCheckWindowHolder.clear();
-            mCheckWindowHolder = null;
+        for (FWindowKeyboardListener item : mCheckWindowHolder.values()) {
+            item.stop();
         }
+        mCheckWindowHolder.clear();
 
         final Application application = mActivity.getApplication();
         application.unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
@@ -111,8 +108,6 @@ public class FKeyboardListener {
 
     /**
      * 检查Window的键盘
-     *
-     * @param window
      */
     public void checkWindow(Window window) {
         if (window == null) {
@@ -127,7 +122,7 @@ public class FKeyboardListener {
             throw new IllegalArgumentException("window must not be Activity's window");
         }
 
-        if (mCheckWindowHolder != null && mCheckWindowHolder.containsKey(window)) {
+        if (mCheckWindowHolder.containsKey(window)) {
             return;
         }
 
@@ -139,9 +134,6 @@ public class FKeyboardListener {
         };
 
         if (keyboardListener.start(window)) {
-            if (mCheckWindowHolder == null) {
-                mCheckWindowHolder = new WeakHashMap<>();
-            }
             mCheckWindowHolder.put(window, keyboardListener);
         }
     }
