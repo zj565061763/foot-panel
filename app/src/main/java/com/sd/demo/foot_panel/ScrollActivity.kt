@@ -1,8 +1,8 @@
-package com.example.foot_panel
+package com.sd.demo.foot_panel
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.foot_panel.databinding.ActivityScrollBinding
+import com.sd.demo.foot_panel.databinding.ActivityScrollBinding
 
 class ScrollActivity : AppCompatActivity() {
     private lateinit var _binding: ActivityScrollBinding

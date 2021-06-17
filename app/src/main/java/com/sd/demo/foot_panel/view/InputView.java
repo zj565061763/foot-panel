@@ -1,4 +1,4 @@
-package com.example.foot_panel.view;
+package com.sd.demo.foot_panel.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.foot_panel.databinding.ViewInputBinding;
+import com.sd.demo.foot_panel.databinding.ViewInputBinding;
 import com.sd.lib.foot_panel.FootPanelListener;
 import com.sd.lib.foot_panel.ext.FKeyboardHeightKeeper;
 import com.sd.lib.foot_panel.ext.FKeyboardVisibleHeightLayout;

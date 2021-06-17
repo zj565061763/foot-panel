@@ -1,4 +1,4 @@
-package com.example.foot_panel.dialog;
+package com.sd.demo.foot_panel.dialog;
 
 import android.app.Activity;
 import android.util.Log;
@@ -6,7 +6,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.example.foot_panel.R;
+import com.sd.demo.foot_panel.R;
 import com.sd.lib.dialoger.impl.FDialoger;
 import com.sd.lib.foot_panel.ext.FKeyboardListener;
 

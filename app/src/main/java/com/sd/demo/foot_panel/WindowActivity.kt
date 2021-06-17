@@ -1,9 +1,9 @@
-package com.example.foot_panel
+package com.sd.demo.foot_panel
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.foot_panel.databinding.ActivityWindowBinding
+import com.sd.demo.foot_panel.databinding.ActivityWindowBinding
 import com.sd.lib.foot_panel.ext.FWindowKeyboardListener
 
 /**

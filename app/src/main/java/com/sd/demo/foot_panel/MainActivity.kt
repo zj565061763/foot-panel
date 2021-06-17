@@ -1,10 +1,10 @@
-package com.example.foot_panel
+package com.sd.demo.foot_panel
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.foot_panel.databinding.ActivityMainBinding
+import com.sd.demo.foot_panel.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var _binding: ActivityMainBinding
