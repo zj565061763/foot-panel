@@ -18,13 +18,17 @@
         </activity>
 
         <activity
+            android:name=".WindowActivity"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
             android:name=".KeyboardActivity"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
             android:name=".FootPanelActivity"
             android:windowSoftInputMode="adjustNothing" />
-        
+
         <activity
             android:name=".ScrollActivity"
             android:windowSoftInputMode="adjustNothing" />

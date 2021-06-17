@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v) {
+            _binding.btnWindow -> startActivity(Intent(this, WindowActivity::class.java))
             _binding.btnKeyboard -> startActivity(Intent(this, KeyboardActivity::class.java))
             _binding.btnFootPanel -> startActivity(Intent(this, FootPanelActivity::class.java))
             _binding.btnScroll -> startActivity(Intent(this, ScrollActivity::class.java))

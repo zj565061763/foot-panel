@@ -5,6 +5,14 @@
     android:orientation="vertical">
 
     <Button
+        android:id="@+id/btn_window"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="WindowActivity"
+        android:textAllCaps="false" />
+
+    <Button
         android:id="@+id/btn_keyboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
