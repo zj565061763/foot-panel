@@ -190,6 +190,7 @@ public class FKeyboardListener {
 
     private static final Map<Activity, FKeyboardListener> MAP_LISTENER = new HashMap<>();
 
+    @NonNull
     public static synchronized FKeyboardListener of(@NonNull Activity activity) {
         FKeyboardListener listener = MAP_LISTENER.get(activity);
         if (listener == null) {
