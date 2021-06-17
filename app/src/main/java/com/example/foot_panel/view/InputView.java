@@ -132,6 +132,12 @@ public class InputView extends FrameLayout implements View.OnClickListener {
                 }
             }
         }
+
+        @Override
+        protected void onFootPanelChanged(@Nullable IFootPanel panel) {
+            Log.i(TAG, "onFootPanelChanged panel:" + panel);
+            super.onFootPanelChanged(panel);
+        }
     };
 
     @Override

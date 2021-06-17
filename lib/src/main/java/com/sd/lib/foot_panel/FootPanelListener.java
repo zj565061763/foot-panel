@@ -1,6 +1,7 @@
 package com.sd.lib.foot_panel;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.sd.lib.foot_panel.panel.IFootPanel;
 import com.sd.lib.foot_panel.panel.KeyboardFootPanel;
@@ -66,12 +67,12 @@ public abstract class FootPanelListener {
         final IFootPanel.HeightChangeCallback callback = new IFootPanel.HeightChangeCallback() {
             @Override
             public void onHeightChanged(int height, @NonNull IFootPanel footPanel) {
-                if (footPanel == mKeyboardFootPanel) {
-                    if (height > 0) {
-                        // 如果软键盘弹出，则自动设置当前面板为软键盘面板
-                        setCurrentFootPanel(mKeyboardFootPanel);
-                    }
-                } else if (footPanel == mCurrentFootPanel) {
+                if (footPanel == mKeyboardFootPanel && height > 0) {
+                    // 如果软键盘弹出，则自动设置当前面板为软键盘面板
+                    setCurrentFootPanel(mKeyboardFootPanel);
+                }
+
+                if (footPanel == mCurrentFootPanel) {
                     setFootHeight(height);
                 }
             }
@@ -112,17 +113,24 @@ public abstract class FootPanelListener {
      */
     public void setCurrentFootPanel(IFootPanel panel) {
         if (panel == null) {
-            mCurrentFootPanel = null;
+            setFootPanel(null);
             setFootHeight(0);
             return;
         }
 
         if (mMapFootPanel.containsKey(panel)) {
-            mCurrentFootPanel = panel;
+            setFootPanel(panel);
             final int height = panel.getPanelHeight();
             if (height > 0) {
                 setFootHeight(height);
             }
+        }
+    }
+
+    private void setFootPanel(IFootPanel panel) {
+        if (mCurrentFootPanel != panel) {
+            mCurrentFootPanel = panel;
+            onFootPanelChanged(panel);
         }
     }
 
@@ -153,4 +161,10 @@ public abstract class FootPanelListener {
      * 底部高度变化
      */
     protected abstract void onFootHeightChanged(int height);
+
+    /**
+     * 底部面板变化
+     */
+    protected void onFootPanelChanged(@Nullable IFootPanel panel) {
+    }
 }
