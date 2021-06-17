@@ -8,6 +8,7 @@
         android:id="@+id/btn_keyboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="onClick"
         android:text="KeyboardActivity"
         android:textAllCaps="false" />
 
@@ -15,6 +16,7 @@
         android:id="@+id/btn_foot_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="onClick"
         android:text="FootPanelActivity"
         android:textAllCaps="false" />
 
@@ -23,6 +25,7 @@
         android:id="@+id/btn_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="onClick"
         android:text="ScrollActivity"
         android:textAllCaps="false" />
 

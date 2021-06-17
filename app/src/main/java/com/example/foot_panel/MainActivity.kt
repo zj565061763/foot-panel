@@ -13,8 +13,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(_binding.root)
-        _binding.btnKeyboard.setOnClickListener(this)
-        _binding.btnFootPanel.setOnClickListener(this)
     }
 
     override fun onClick(v: View) {
