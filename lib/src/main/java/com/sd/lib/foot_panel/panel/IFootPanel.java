@@ -2,8 +2,7 @@ package com.sd.lib.foot_panel.panel;
 
 import com.sd.lib.foot_panel.FootPanelListener;
 
-public interface IFootPanel
-{
+public interface IFootPanel {
     /**
      * 返回面板当前的高度
      *
@@ -23,8 +22,7 @@ public interface IFootPanel
      */
     void releasePanel();
 
-    interface HeightChangeCallback
-    {
+    interface HeightChangeCallback {
         /**
          * 高度变化
          *

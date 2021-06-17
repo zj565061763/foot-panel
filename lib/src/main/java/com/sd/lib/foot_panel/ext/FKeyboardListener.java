@@ -14,25 +14,22 @@ import java.util.WeakHashMap;
 /**
  * 键盘监听
  */
-public class FKeyboardListener
-{
+public class FKeyboardListener {
     private final Activity mActivity;
     private final FWindowKeyboardListener mKeyboardListener;
     private final Map<Callback, String> mCallbackHolder = new WeakHashMap<>();
 
     private Map<Window, FWindowKeyboardListener> mCheckWindowHolder;
 
-    private FKeyboardListener(Activity activity)
-    {
-        if (activity == null)
+    private FKeyboardListener(Activity activity) {
+        if (activity == null) {
             throw new NullPointerException("activity is null");
+        }
 
         mActivity = activity;
-        mKeyboardListener = new FWindowKeyboardListener(activity)
-        {
+        mKeyboardListener = new FWindowKeyboardListener(activity) {
             @Override
-            protected void onKeyboardHeightChanged(int height)
-            {
+            protected void onKeyboardHeightChanged(int height) {
                 FKeyboardListener.this.notifyCallbacks(height);
             }
         };
@@ -43,10 +40,10 @@ public class FKeyboardListener
      *
      * @param callback
      */
-    public void addCallback(Callback callback)
-    {
-        if (callback == null)
+    public void addCallback(Callback callback) {
+        if (callback == null) {
             return;
+        }
 
         mCallbackHolder.put(callback, "");
     }
@@ -56,10 +53,10 @@ public class FKeyboardListener
      *
      * @param callback
      */
-    public void removeCallback(Callback callback)
-    {
-        if (callback == null)
+    public void removeCallback(Callback callback) {
+        if (callback == null) {
             return;
+        }
 
         mCallbackHolder.remove(callback);
     }
@@ -69,8 +66,7 @@ public class FKeyboardListener
      *
      * @return
      */
-    public int getKeyboardHeight()
-    {
+    public int getKeyboardHeight() {
         return mKeyboardListener.getKeyboardHeight();
     }
 
@@ -79,8 +75,7 @@ public class FKeyboardListener
      *
      * @return
      */
-    public int getKeyboardVisibleHeight()
-    {
+    public int getKeyboardVisibleHeight() {
         return mKeyboardListener.getKeyboardVisibleHeight();
     }
 
@@ -89,8 +84,7 @@ public class FKeyboardListener
      *
      * @return
      */
-    public static int getCachedKeyboardVisibleHeight()
-    {
+    public static int getCachedKeyboardVisibleHeight() {
         return FWindowKeyboardListener.getCachedKeyboardVisibleHeight();
     }
 
@@ -99,11 +93,9 @@ public class FKeyboardListener
      *
      * @param height
      */
-    private void notifyCallbacks(int height)
-    {
+    private void notifyCallbacks(int height) {
         final List<Callback> list = new ArrayList<>(mCallbackHolder.keySet());
-        for (Callback item : list)
-        {
+        for (Callback item : list) {
             item.onKeyboardHeightChanged(height, this);
         }
     }
@@ -111,12 +103,10 @@ public class FKeyboardListener
     /**
      * 开始监听
      */
-    private boolean start()
-    {
+    private boolean start() {
         final Window window = mActivity.getWindow();
         final boolean start = mKeyboardListener.start(window);
-        if (start)
-        {
+        if (start) {
             final Application application = mActivity.getApplication();
             application.unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
             application.registerActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
@@ -127,14 +117,11 @@ public class FKeyboardListener
     /**
      * 停止监听
      */
-    private void stop()
-    {
+    private void stop() {
         mKeyboardListener.stop();
 
-        if (mCheckWindowHolder != null)
-        {
-            for (FWindowKeyboardListener item : mCheckWindowHolder.values())
-            {
+        if (mCheckWindowHolder != null) {
+            for (FWindowKeyboardListener item : mCheckWindowHolder.values()) {
                 item.stop();
             }
             mCheckWindowHolder.clear();
@@ -150,79 +137,72 @@ public class FKeyboardListener
      *
      * @param window
      */
-    public void checkWindow(Window window)
-    {
-        if (window == null)
+    public void checkWindow(Window window) {
+        if (window == null) {
             return;
+        }
 
-        if (mActivity.isFinishing())
+        if (mActivity.isFinishing()) {
             return;
+        }
 
-        if (mActivity.getWindow() == window)
+        if (mActivity.getWindow() == window) {
             throw new IllegalArgumentException("window must not be Activity's window");
+        }
 
-        if (mCheckWindowHolder != null && mCheckWindowHolder.containsKey(window))
+        if (mCheckWindowHolder != null && mCheckWindowHolder.containsKey(window)) {
             return;
+        }
 
-        final FWindowKeyboardListener keyboardListener = new FWindowKeyboardListener(mActivity)
-        {
+        final FWindowKeyboardListener keyboardListener = new FWindowKeyboardListener(mActivity) {
             @Override
-            protected void onKeyboardHeightChanged(int height)
-            {
+            protected void onKeyboardHeightChanged(int height) {
                 mKeyboardListener.notifyKeyboardHeight(height);
             }
         };
 
-        if (keyboardListener.start(window))
-        {
-            if (mCheckWindowHolder == null)
+        if (keyboardListener.start(window)) {
+            if (mCheckWindowHolder == null) {
                 mCheckWindowHolder = new WeakHashMap<>();
+            }
             mCheckWindowHolder.put(window, keyboardListener);
         }
     }
 
-    private final Application.ActivityLifecycleCallbacks mActivityLifecycleCallbacks = new Application.ActivityLifecycleCallbacks()
-    {
+    private final Application.ActivityLifecycleCallbacks mActivityLifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
         @Override
-        public void onActivityCreated(Activity activity, Bundle savedInstanceState)
-        {
+        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         }
 
         @Override
-        public void onActivityStarted(Activity activity)
-        {
+        public void onActivityStarted(Activity activity) {
         }
 
         @Override
-        public void onActivityResumed(Activity activity)
-        {
+        public void onActivityResumed(Activity activity) {
         }
 
         @Override
-        public void onActivityPaused(Activity activity)
-        {
+        public void onActivityPaused(Activity activity) {
         }
 
         @Override
-        public void onActivityStopped(Activity activity)
-        {
+        public void onActivityStopped(Activity activity) {
         }
 
         @Override
-        public void onActivitySaveInstanceState(Activity activity, Bundle outState)
-        {
+        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
         }
 
         @Override
-        public void onActivityDestroyed(Activity activity)
-        {
-            if (mActivity == activity)
+        public void onActivityDestroyed(Activity activity) {
+            if (mActivity == activity) {
                 removeActivity(activity);
+            }
         }
     };
 
-    public interface Callback
-    {
+    public interface Callback {
         /**
          * 键盘高度变化回调
          *
@@ -236,28 +216,29 @@ public class FKeyboardListener
 
     private static final Map<Activity, FKeyboardListener> MAP_LISTENER = new HashMap<>();
 
-    public static synchronized FKeyboardListener of(Activity activity)
-    {
-        if (activity == null)
+    public static synchronized FKeyboardListener of(Activity activity) {
+        if (activity == null) {
             return null;
+        }
 
         FKeyboardListener listener = MAP_LISTENER.get(activity);
-        if (listener == null)
-        {
+        if (listener == null) {
             listener = new FKeyboardListener(activity);
-            if (listener.start())
+            if (listener.start()) {
                 MAP_LISTENER.put(activity, listener);
+            }
         }
         return listener;
     }
 
-    private static synchronized void removeActivity(Activity activity)
-    {
-        if (activity == null)
+    private static synchronized void removeActivity(Activity activity) {
+        if (activity == null) {
             return;
+        }
 
         final FKeyboardListener listener = MAP_LISTENER.remove(activity);
-        if (listener != null)
+        if (listener != null) {
             listener.stop();
+        }
     }
 }

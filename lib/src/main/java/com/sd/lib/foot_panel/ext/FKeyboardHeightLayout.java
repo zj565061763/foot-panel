@@ -9,82 +9,72 @@ import android.widget.FrameLayout;
 /**
  * 高度为键盘高度的布局
  */
-public class FKeyboardHeightLayout extends FrameLayout
-{
-    public FKeyboardHeightLayout(Context context)
-    {
+public class FKeyboardHeightLayout extends FrameLayout {
+    public FKeyboardHeightLayout(Context context) {
         super(context);
         init(context);
     }
 
-    public FKeyboardHeightLayout(Context context, AttributeSet attrs)
-    {
+    public FKeyboardHeightLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
     private Activity mActivity;
 
-    private void init(Context context)
-    {
-        if (!(context instanceof Activity))
+    private void init(Context context) {
+        if (!(context instanceof Activity)) {
             throw new IllegalArgumentException("context must be instance of " + Activity.class.getName());
+        }
         mActivity = (Activity) context;
     }
 
-    public final FKeyboardListener getKeyboardListener()
-    {
+    public final FKeyboardListener getKeyboardListener() {
         return FKeyboardListener.of(mActivity);
     }
 
-    private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback()
-    {
+    private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback() {
         @Override
-        public void onKeyboardHeightChanged(int height, FKeyboardListener listener)
-        {
+        public void onKeyboardHeightChanged(int height, FKeyboardListener listener) {
             updateHeight();
         }
     };
 
-    protected int getKeyboardHeight()
-    {
+    protected int getKeyboardHeight() {
         return getKeyboardListener().getKeyboardHeight();
     }
 
-    private void updateHeight()
-    {
+    private void updateHeight() {
         final ViewGroup.LayoutParams params = getLayoutParams();
-        if (params == null)
+        if (params == null) {
             return;
+        }
 
         final int keyboardHeight = getKeyboardHeight();
-        if (params.height != keyboardHeight)
-        {
+        if (params.height != keyboardHeight) {
             params.height = keyboardHeight;
             setLayoutParams(params);
         }
     }
 
     @Override
-    public void setLayoutParams(ViewGroup.LayoutParams params)
-    {
-        if (params != null)
+    public void setLayoutParams(ViewGroup.LayoutParams params) {
+        if (params != null) {
             params.height = getKeyboardHeight();
+        }
 
         super.setLayoutParams(params);
     }
 
     @Override
-    protected void onAttachedToWindow()
-    {
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         getKeyboardListener().addCallback(mKeyboardCallback);
         updateHeight();
     }
 
     @Override
-    protected void onDetachedFromWindow()
-    {
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         getKeyboardListener().removeCallback(mKeyboardCallback);
     }

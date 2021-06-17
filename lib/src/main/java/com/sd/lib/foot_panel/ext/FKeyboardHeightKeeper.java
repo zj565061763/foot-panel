@@ -12,8 +12,7 @@ import java.util.WeakHashMap;
 /**
  * 将View的高度与键盘的高度保持一致
  */
-public class FKeyboardHeightKeeper
-{
+public class FKeyboardHeightKeeper {
     private final Activity mActivity;
     private final Map<View, ViewConfig> mViewHolder = new WeakHashMap<>();
 
@@ -21,27 +20,25 @@ public class FKeyboardHeightKeeper
     private int mViewHeight = 0;
     private int mMinHeight = -1;
 
-    public FKeyboardHeightKeeper(Activity activity)
-    {
-        if (activity == null)
+    public FKeyboardHeightKeeper(Activity activity) {
+        if (activity == null) {
             throw new NullPointerException("activity is null");
+        }
         mActivity = activity;
     }
 
-    private FKeyboardListener getKeyboardListener()
-    {
-        if (mKeyboardListener == null)
-        {
+    private FKeyboardListener getKeyboardListener() {
+        if (mKeyboardListener == null) {
             mKeyboardListener = FKeyboardListener.of(mActivity);
             mKeyboardListener.addCallback(mKeyboardCallback);
         }
         return mKeyboardListener;
     }
 
-    private int getMinHeight()
-    {
-        if (mMinHeight < 0)
+    private int getMinHeight() {
+        if (mMinHeight < 0) {
             mMinHeight = dp2px(180, mActivity);
+        }
         return mMinHeight;
     }
 
@@ -52,10 +49,8 @@ public class FKeyboardHeightKeeper
      *
      * @param minHeight
      */
-    public void setMinHeight(int minHeight)
-    {
-        if (mMinHeight != minHeight)
-        {
+    public void setMinHeight(int minHeight) {
+        if (mMinHeight != minHeight) {
             mMinHeight = minHeight;
             notifyHeight(mViewHeight);
         }
@@ -66,24 +61,27 @@ public class FKeyboardHeightKeeper
      *
      * @param view
      */
-    public void addView(View view)
-    {
-        if (view == null)
+    public void addView(View view) {
+        if (view == null) {
             return;
+        }
 
-        if (mViewHolder.containsKey(view))
+        if (mViewHolder.containsKey(view)) {
             return;
+        }
 
         final ViewConfig config = new ViewConfig(view);
         mViewHolder.put(view, config);
 
         int height = getKeyboardListener().getKeyboardVisibleHeight();
-        if (height == 0)
+        if (height == 0) {
             height = FKeyboardListener.getCachedKeyboardVisibleHeight();
+        }
 
         // 检查最小高度
-        if (height < getMinHeight())
+        if (height < getMinHeight()) {
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        }
 
         config.updateHeight(height);
     }
@@ -93,10 +91,10 @@ public class FKeyboardHeightKeeper
      *
      * @param view
      */
-    public void removeView(View view)
-    {
-        if (view == null)
+    public void removeView(View view) {
+        if (view == null) {
             return;
+        }
 
         mViewHolder.remove(view);
     }
@@ -104,77 +102,70 @@ public class FKeyboardHeightKeeper
     /**
      * 监听软键盘
      */
-    private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback()
-    {
+    private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback() {
         @Override
-        public void onKeyboardHeightChanged(int height, FKeyboardListener listener)
-        {
+        public void onKeyboardHeightChanged(int height, FKeyboardListener listener) {
             notifyHeight(height);
         }
     };
 
-    private void notifyHeight(int height)
-    {
-        if (height <= 0)
+    private void notifyHeight(int height) {
+        if (height <= 0) {
             return;
+        }
 
         // 检查最小高度
-        if (height < getMinHeight())
+        if (height < getMinHeight()) {
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        }
 
-        if (mViewHeight != height)
-        {
+        if (mViewHeight != height) {
             mViewHeight = height;
-            for (ViewConfig item : mViewHolder.values())
-            {
+            for (ViewConfig item : mViewHolder.values()) {
                 item.updateHeight(height);
             }
         }
     }
 
-    private final class ViewConfig
-    {
+    private final class ViewConfig {
         private final WeakReference<View> mView;
 
-        private ViewConfig(View view)
-        {
-            if (view == null)
+        private ViewConfig(View view) {
+            if (view == null) {
                 throw new NullPointerException("view is null");
+            }
             mView = new WeakReference<>(view);
         }
 
-        public void updateHeight(int height)
-        {
-            if (height == 0)
+        public void updateHeight(int height) {
+            if (height == 0) {
                 return;
+            }
 
             final View view = mView.get();
-            if (view == null)
+            if (view == null) {
                 return;
+            }
 
             ViewGroup.LayoutParams params = view.getLayoutParams();
-            if (params == null)
-            {
+            if (params == null) {
                 params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
                 updateViewHeight(view, params);
                 return;
             }
 
-            if (params.height != height)
-            {
+            if (params.height != height) {
                 params.height = height;
                 updateViewHeight(view, params);
             }
         }
     }
 
-    protected void updateViewHeight(View view, ViewGroup.LayoutParams params)
-    {
+    protected void updateViewHeight(View view, ViewGroup.LayoutParams params) {
         view.setLayoutParams(params);
     }
 
-    private static int dp2px(float dp, Context context)
-    {
+    private static int dp2px(float dp, Context context) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }

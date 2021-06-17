@@ -19,8 +19,7 @@ import java.lang.ref.WeakReference;
 /**
  * 键盘监听
  */
-public abstract class FWindowKeyboardListener
-{
+public abstract class FWindowKeyboardListener {
     protected final Activity mActivity;
     private WeakReference<View> mTarget;
 
@@ -35,10 +34,10 @@ public abstract class FWindowKeyboardListener
     /** 缓存的键盘可见时候的高度 */
     private static int sCachedKeyboardVisibleHeight;
 
-    public FWindowKeyboardListener(Activity activity)
-    {
-        if (activity == null)
+    public FWindowKeyboardListener(Activity activity) {
+        if (activity == null) {
             throw new NullPointerException("activity is null");
+        }
 
         mActivity = activity;
     }
@@ -48,8 +47,7 @@ public abstract class FWindowKeyboardListener
      *
      * @return
      */
-    public int getKeyboardHeight()
-    {
+    public int getKeyboardHeight() {
         return mKeyboardHeight;
     }
 
@@ -58,8 +56,7 @@ public abstract class FWindowKeyboardListener
      *
      * @return
      */
-    public int getKeyboardVisibleHeight()
-    {
+    public int getKeyboardVisibleHeight() {
         return mKeyboardVisibleHeight;
     }
 
@@ -68,8 +65,7 @@ public abstract class FWindowKeyboardListener
      *
      * @return
      */
-    public static int getCachedKeyboardVisibleHeight()
-    {
+    public static int getCachedKeyboardVisibleHeight() {
         return sCachedKeyboardVisibleHeight;
     }
 
@@ -78,20 +74,23 @@ public abstract class FWindowKeyboardListener
      *
      * @param window
      */
-    public final boolean start(Window window)
-    {
-        if (mActivity.isFinishing())
+    public final boolean start(Window window) {
+        if (mActivity.isFinishing()) {
             return false;
+        }
 
-        if (window == null)
+        if (window == null) {
             return false;
+        }
 
         final View target = window.getDecorView();
-        if (target == null)
+        if (target == null) {
             return false;
+        }
 
-        if (setTarget(target))
+        if (setTarget(target)) {
             hidePopupWindow();
+        }
 
         showPopupWindow(target);
         return true;
@@ -100,46 +99,41 @@ public abstract class FWindowKeyboardListener
     /**
      * 停止监听
      */
-    public final void stop()
-    {
+    public final void stop() {
         hidePopupWindow();
         setTarget(null);
     }
 
-    private View getTarget()
-    {
+    private View getTarget() {
         return mTarget == null ? null : mTarget.get();
     }
 
-    private boolean setTarget(View target)
-    {
+    private boolean setTarget(View target) {
         final View old = getTarget();
-        if (old != target)
-        {
-            if (old != null)
+        if (old != target) {
+            if (old != null) {
                 old.removeOnAttachStateChangeListener(mOnAttachStateChangeListener);
+            }
 
             mTarget = target == null ? null : new WeakReference<>(target);
 
-            if (target != null)
+            if (target != null) {
                 target.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
+            }
 
             return true;
         }
         return false;
     }
 
-    private final View.OnAttachStateChangeListener mOnAttachStateChangeListener = new View.OnAttachStateChangeListener()
-    {
+    private final View.OnAttachStateChangeListener mOnAttachStateChangeListener = new View.OnAttachStateChangeListener() {
         @Override
-        public void onViewAttachedToWindow(View v)
-        {
+        public void onViewAttachedToWindow(View v) {
             showPopupWindow(v);
         }
 
         @Override
-        public void onViewDetachedFromWindow(View v)
-        {
+        public void onViewDetachedFromWindow(View v) {
             hidePopupWindow();
         }
     };
@@ -150,19 +144,22 @@ public abstract class FWindowKeyboardListener
      * @param target
      * @return
      */
-    private boolean showPopupWindow(View target)
-    {
-        if (!isAttached(target))
+    private boolean showPopupWindow(View target) {
+        if (!isAttached(target)) {
             return false;
+        }
 
-        if (mActivity.isFinishing())
+        if (mActivity.isFinishing()) {
             return false;
+        }
 
-        if (mPopupWindow != null && mPopupWindow.isShowing())
+        if (mPopupWindow != null && mPopupWindow.isShowing()) {
             return false;
+        }
 
-        if (mPopupWindow == null)
+        if (mPopupWindow == null) {
             mPopupWindow = new InternalPopupWindow(mActivity);
+        }
 
         mPopupWindow.showAtLocation(target, Gravity.NO_GRAVITY, 0, 0);
         return true;
@@ -171,21 +168,17 @@ public abstract class FWindowKeyboardListener
     /**
      * 隐藏PopupWindow
      */
-    private void hidePopupWindow()
-    {
-        if (mPopupWindow != null)
-        {
+    private void hidePopupWindow() {
+        if (mPopupWindow != null) {
             mPopupWindow.dismiss();
             mPopupWindow = null;
         }
     }
 
-    protected void onStart()
-    {
+    protected void onStart() {
     }
 
-    protected void onStop()
-    {
+    protected void onStop() {
     }
 
     /**
@@ -193,13 +186,12 @@ public abstract class FWindowKeyboardListener
      *
      * @param height
      */
-    final void notifyKeyboardHeight(int height)
-    {
-        if (mKeyboardHeight != height)
-        {
+    final void notifyKeyboardHeight(int height) {
+        if (mKeyboardHeight != height) {
             mKeyboardHeight = height;
-            if (height > 0)
+            if (height > 0) {
                 mKeyboardVisibleHeight = height;
+            }
 
             onKeyboardHeightChanged(height);
         }
@@ -212,13 +204,11 @@ public abstract class FWindowKeyboardListener
      */
     protected abstract void onKeyboardHeightChanged(int height);
 
-    private final class InternalPopupWindow extends PopupWindow implements View.OnAttachStateChangeListener, ViewTreeObserver.OnGlobalLayoutListener
-    {
+    private final class InternalPopupWindow extends PopupWindow implements View.OnAttachStateChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
         private final View mView;
         private final Rect mRect = new Rect();
 
-        public InternalPopupWindow(Context context)
-        {
+        public InternalPopupWindow(Context context) {
             mView = new View(context.getApplicationContext());
             mView.addOnAttachStateChangeListener(InternalPopupWindow.this);
 
@@ -231,43 +221,41 @@ public abstract class FWindowKeyboardListener
         }
 
         @Override
-        public void onViewAttachedToWindow(View v)
-        {
+        public void onViewAttachedToWindow(View v) {
             final ViewTreeObserver observer = v.getViewTreeObserver();
-            if (observer.isAlive())
+            if (observer.isAlive()) {
                 observer.addOnGlobalLayoutListener(InternalPopupWindow.this);
+            }
 
             FWindowKeyboardListener.this.onStart();
         }
 
         @Override
-        public void onViewDetachedFromWindow(View v)
-        {
+        public void onViewDetachedFromWindow(View v) {
             final ViewTreeObserver observer = v.getViewTreeObserver();
-            if (observer.isAlive())
+            if (observer.isAlive()) {
                 observer.removeOnGlobalLayoutListener(InternalPopupWindow.this);
+            }
 
             FWindowKeyboardListener.this.onStop();
         }
 
         @Override
-        public void onGlobalLayout()
-        {
+        public void onGlobalLayout() {
             mView.getWindowVisibleDisplayFrame(mRect);
 
             final int viewHeight = mRect.height();
-            if (viewHeight > mMaxViewHeight)
+            if (viewHeight > mMaxViewHeight) {
                 mMaxViewHeight = viewHeight;
+            }
 
             int keyboardHeight = mMaxViewHeight - viewHeight;
-            if (keyboardHeight > 0 && keyboardHeight <= 100)
-            {
+            if (keyboardHeight > 0 && keyboardHeight <= 100) {
                 // 如果键盘高度过小，则当作0处理
                 keyboardHeight = 0;
             }
 
-            if (keyboardHeight > 0)
-            {
+            if (keyboardHeight > 0) {
                 // 缓存键盘可见时候的高度
                 sCachedKeyboardVisibleHeight = keyboardHeight;
             }
@@ -276,14 +264,15 @@ public abstract class FWindowKeyboardListener
         }
     }
 
-    private static boolean isAttached(View view)
-    {
-        if (view == null)
+    private static boolean isAttached(View view) {
+        if (view == null) {
             return false;
+        }
 
-        if (Build.VERSION.SDK_INT >= 19)
+        if (Build.VERSION.SDK_INT >= 19) {
             return view.isAttachedToWindow();
-        else
+        } else {
             return view.getWindowToken() != null;
+        }
     }
 }

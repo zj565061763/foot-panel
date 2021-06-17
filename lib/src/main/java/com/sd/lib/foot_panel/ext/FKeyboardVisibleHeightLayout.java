@@ -6,24 +6,21 @@ import android.util.AttributeSet;
 /**
  * 高度为键盘可见高度的布局
  */
-public class FKeyboardVisibleHeightLayout extends FKeyboardHeightLayout
-{
-    public FKeyboardVisibleHeightLayout(Context context)
-    {
+public class FKeyboardVisibleHeightLayout extends FKeyboardHeightLayout {
+    public FKeyboardVisibleHeightLayout(Context context) {
         super(context);
     }
 
-    public FKeyboardVisibleHeightLayout(Context context, AttributeSet attrs)
-    {
+    public FKeyboardVisibleHeightLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
-    protected int getKeyboardHeight()
-    {
+    protected int getKeyboardHeight() {
         int height = getKeyboardListener().getKeyboardVisibleHeight();
-        if (height == 0)
+        if (height == 0) {
             height = FKeyboardListener.getCachedKeyboardVisibleHeight();
+        }
         return height;
     }
 }
