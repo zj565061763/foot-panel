@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import java.lang.ref.WeakReference;
  * 键盘监听
  */
 public abstract class FWindowKeyboardListener {
+    private static final String TAG = FWindowKeyboardListener.class.getSimpleName();
+
     private InternalPopupWindow mPopupWindow;
     private WeakReference<View> mTarget;
 
@@ -69,6 +72,7 @@ public abstract class FWindowKeyboardListener {
             return false;
         }
 
+        Log.i(TAG, "start window:" + window);
         if (setTarget(target)) {
             hidePopupWindow();
         }
@@ -81,6 +85,7 @@ public abstract class FWindowKeyboardListener {
      * 停止监听
      */
     public final void stop() {
+        Log.i(TAG, "stop");
         hidePopupWindow();
         setTarget(null);
     }
@@ -100,6 +105,7 @@ public abstract class FWindowKeyboardListener {
         }
 
         mTarget = target == null ? null : new WeakReference<>(target);
+        Log.i(TAG, "setTarget target:" + target);
 
         if (target != null) {
             target.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
@@ -110,11 +116,13 @@ public abstract class FWindowKeyboardListener {
     private final View.OnAttachStateChangeListener mOnAttachStateChangeListener = new View.OnAttachStateChangeListener() {
         @Override
         public void onViewAttachedToWindow(View v) {
+            Log.i(TAG, "onViewAttachedToWindow view:" + v);
             showPopupWindow();
         }
 
         @Override
         public void onViewDetachedFromWindow(View v) {
+            Log.i(TAG, "onViewDetachedFromWindow view:" + v);
             hidePopupWindow();
         }
     };
@@ -140,6 +148,7 @@ public abstract class FWindowKeyboardListener {
             mPopupWindow = new InternalPopupWindow(target.getContext());
         }
 
+        Log.i(TAG, "showPopupWindow target:" + target);
         mPopupWindow.showAtLocation(target, Gravity.NO_GRAVITY, 0, 0);
         return true;
     }
@@ -160,6 +169,8 @@ public abstract class FWindowKeyboardListener {
     final void notifyKeyboardHeight(int height) {
         if (mKeyboardHeight != height) {
             mKeyboardHeight = height;
+            Log.i(TAG, "notifyKeyboardHeight height:" + height);
+
             if (height > 0) {
                 mKeyboardVisibleHeight = height;
             }
@@ -171,12 +182,14 @@ public abstract class FWindowKeyboardListener {
      * 开始监听
      */
     protected void onStart() {
+        Log.i(TAG, "onStart");
     }
 
     /**
      * 停止监听
      */
     protected void onStop() {
+        Log.i(TAG, "onStop");
     }
 
     /**
@@ -225,6 +238,7 @@ public abstract class FWindowKeyboardListener {
             final int viewHeight = mRect.height();
             if (viewHeight > mMaxViewHeight) {
                 mMaxViewHeight = viewHeight;
+                Log.i(TAG, "onGlobalLayout mMaxViewHeight:" + mMaxViewHeight + " viewHeight:" + viewHeight);
             }
 
             int keyboardHeight = mMaxViewHeight - viewHeight;
