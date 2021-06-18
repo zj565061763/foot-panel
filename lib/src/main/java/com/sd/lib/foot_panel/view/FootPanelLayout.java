@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.sd.lib.foot_panel.FootPanelListener;
 import com.sd.lib.foot_panel.ext.FKeyboardHeightKeeper;
-import com.sd.lib.foot_panel.ext.FKeyboardVisibleHeightLayout;
+import com.sd.lib.foot_panel.ext.FKeyboardHeightLayout;
 import com.sd.lib.foot_panel.panel.IFootPanel;
 import com.sd.lib.foot_panel.panel.KeyboardFootPanel;
 import com.sd.lib.foot_panel.panel.ViewFootPanel;
@@ -104,7 +104,7 @@ public class FootPanelLayout extends FrameLayout {
 
     private View getKeyBoardView() {
         if (mKeyBoardView == null) {
-            mKeyBoardView = new FKeyboardVisibleHeightLayout(mActivity);
+            mKeyBoardView = new FKeyboardHeightLayout(mActivity);
         }
         return mKeyBoardView;
     }
