@@ -2,14 +2,12 @@ package com.sd.lib.foot_panel.ext;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
@@ -191,11 +189,11 @@ public abstract class FWindowKeyboardListener {
 
     private final class InternalPopupWindow extends PopupWindow implements View.OnAttachStateChangeListener {
         private final View mView;
-        private final Rect mRect = new Rect();
 
         public InternalPopupWindow(Context context) {
             mView = new View(context.getApplicationContext());
             mView.addOnAttachStateChangeListener(InternalPopupWindow.this);
+            mView.addOnLayoutChangeListener(mOnLayoutChangeListener);
 
             setContentView(mView);
             setWidth(1);
@@ -207,27 +205,18 @@ public abstract class FWindowKeyboardListener {
 
         @Override
         public void onViewAttachedToWindow(View v) {
-            final ViewTreeObserver observer = v.getViewTreeObserver();
-            if (observer.isAlive()) {
-                observer.addOnGlobalLayoutListener(mOnGlobalLayoutListener);
-            }
             FWindowKeyboardListener.this.onStart();
         }
 
         @Override
         public void onViewDetachedFromWindow(View v) {
-            final ViewTreeObserver observer = v.getViewTreeObserver();
-            if (observer.isAlive()) {
-                observer.removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
-            }
             FWindowKeyboardListener.this.onStop();
         }
 
-        private final ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        private final View.OnLayoutChangeListener mOnLayoutChangeListener = new View.OnLayoutChangeListener() {
             @Override
-            public void onGlobalLayout() {
-                mView.getWindowVisibleDisplayFrame(mRect);
-                checkViewHeight(mRect.height());
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                checkViewHeight(v.getHeight());
             }
         };
 
