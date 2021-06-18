@@ -30,6 +30,10 @@
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
+            android:name=".HeightKeeperActivity"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
             android:name=".FootPanelActivity"
             android:windowSoftInputMode="adjustNothing" />
 
