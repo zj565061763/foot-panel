@@ -42,7 +42,7 @@ public class FKeyboardHeightKeeper {
     /**
      * 添加View
      */
-    public void addView(@NonNull View view) {
+    public final void addView(@NonNull View view) {
         if (mViewHolder.containsKey(view)) {
             return;
         }
@@ -61,7 +61,7 @@ public class FKeyboardHeightKeeper {
     /**
      * 移除View
      */
-    public void removeView(View view) {
+    public final void removeView(View view) {
         if (view != null) {
             mViewHolder.remove(view);
         }
