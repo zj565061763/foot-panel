@@ -84,13 +84,14 @@ public class FKeyboardHeightKeeper {
             return;
         }
 
-        if (mViewHeight != height) {
-            mViewHeight = height;
+        if (mViewHeight == height) {
+            return;
+        }
 
-            final List<ViewConfig> list = new ArrayList<>(mViewHolder.values());
-            for (ViewConfig item : list) {
-                item.updateHeight(height);
-            }
+        mViewHeight = height;
+        final List<ViewConfig> list = new ArrayList<>(mViewHolder.values());
+        for (ViewConfig item : list) {
+            item.updateHeight(height);
         }
     }
 
