@@ -40,8 +40,11 @@ public class FKeyboardHeightLayout extends FrameLayout {
     private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback() {
         @Override
         public void onKeyboardHeightChanged(int height, FKeyboardListener listener) {
-            Log.i(FKeyboardHeightLayout.class.getSimpleName(), "onKeyboardHeightChanged height:" + height);
-            requestLayout();
+            final int viewHeight = getHeight();
+            Log.i(FKeyboardHeightLayout.class.getSimpleName(), "onKeyboardHeightChanged height:" + height + " viewHeight:" + viewHeight);
+            if (viewHeight != height) {
+                requestLayout();
+            }
         }
     };
 
