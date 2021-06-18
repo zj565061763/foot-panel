@@ -3,7 +3,7 @@ package com.sd.lib.foot_panel.ext;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 /**
@@ -40,35 +40,22 @@ public class FKeyboardHeightLayout extends FrameLayout {
     private final FKeyboardListener.Callback mKeyboardCallback = new FKeyboardListener.Callback() {
         @Override
         public void onKeyboardHeightChanged(int height, FKeyboardListener listener) {
-            updateViewHeight();
+            Log.i(FKeyboardHeightLayout.class.getSimpleName(), "onKeyboardHeightChanged height:" + height);
+            requestLayout();
         }
     };
 
-    private void updateViewHeight() {
-        final ViewGroup.LayoutParams params = getLayoutParams();
-        if (params == null) {
-            return;
-        }
-
-        final int keyboardHeight = getKeyboardHeight();
-        if (params.height != keyboardHeight) {
-            params.height = keyboardHeight;
-            setLayoutParams(params);
-        }
-    }
-
     @Override
-    public void setLayoutParams(ViewGroup.LayoutParams params) {
-        if (params != null) {
-            params.height = getKeyboardHeight();
-        }
-        super.setLayoutParams(params);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        final int keyboardHeight = getKeyboardHeight();
+        Log.i(FKeyboardHeightLayout.class.getSimpleName(), "onMeasure keyboardHeight:" + keyboardHeight);
+        super.onMeasure(widthMeasureSpec,
+                MeasureSpec.makeMeasureSpec(keyboardHeight, MeasureSpec.EXACTLY));
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        updateViewHeight();
         FKeyboardListener.of(mActivity).addCallback(mKeyboardCallback);
     }
 
