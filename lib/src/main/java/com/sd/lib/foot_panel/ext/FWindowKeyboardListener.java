@@ -1,6 +1,5 @@
 package com.sd.lib.foot_panel.ext;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -68,10 +67,6 @@ public abstract class FWindowKeyboardListener {
             return false;
         }
 
-        if (isFinishing(target)) {
-            return false;
-        }
-
         Log.i(TAG, "start window:" + window);
         if (setTarget(target)) {
             hidePopupWindow();
@@ -133,10 +128,6 @@ public abstract class FWindowKeyboardListener {
     private boolean showPopupWindow() {
         final View target = getTarget();
         if (!isAttached(target)) {
-            return false;
-        }
-
-        if (isFinishing(target)) {
             return false;
         }
 
@@ -270,14 +261,5 @@ public abstract class FWindowKeyboardListener {
         } else {
             return view.getWindowToken() != null;
         }
-    }
-
-    private static boolean isFinishing(View view) {
-        final Context context = view.getContext();
-        if (context instanceof Activity) {
-            final Activity activity = (Activity) context;
-            return activity.isFinishing();
-        }
-        return false;
     }
 }
