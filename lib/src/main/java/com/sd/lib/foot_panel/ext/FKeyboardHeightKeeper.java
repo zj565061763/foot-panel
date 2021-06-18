@@ -139,7 +139,7 @@ public class FKeyboardHeightKeeper {
     /**
      * 更新View的高度
      */
-    protected void updateViewHeight(View view, ViewGroup.LayoutParams params) {
+    protected void updateViewHeight(@NonNull View view, @NonNull ViewGroup.LayoutParams params) {
         view.setLayoutParams(params);
     }
 
