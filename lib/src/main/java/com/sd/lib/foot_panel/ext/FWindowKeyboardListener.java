@@ -238,10 +238,14 @@ public abstract class FWindowKeyboardListener {
             final int viewHeight = mRect.height();
             if (viewHeight > mMaxViewHeight) {
                 mMaxViewHeight = viewHeight;
-                Log.i(TAG, "onGlobalLayout mMaxViewHeight:" + mMaxViewHeight + " viewHeight:" + viewHeight);
             }
 
             int keyboardHeight = mMaxViewHeight - viewHeight;
+            Log.i(TAG, "onGlobalLayout"
+                    + " mMaxViewHeight:" + mMaxViewHeight
+                    + " viewHeight:" + viewHeight
+                    + " keyboardHeight:" + keyboardHeight);
+
             if (keyboardHeight > 0 && keyboardHeight <= 100) {
                 // 如果键盘高度过小，则当作0处理
                 keyboardHeight = 0;
