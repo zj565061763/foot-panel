@@ -119,6 +119,18 @@ public class FootPanelLayout extends FrameLayout {
         }
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mFootPanelListener.start();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mFootPanelListener.stop();
+    }
+
     private static void removeViewFromParent(View view) {
         if (view == null) {
             return;
