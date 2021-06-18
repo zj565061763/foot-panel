@@ -30,8 +30,8 @@ public class FKeyboardHeightLayout extends FrameLayout {
         }
     }
 
-    protected int getKeyboardHeight() {
-        return FKeyboardListener.of(mActivity).getKeyboardHeight();
+    protected int getKeyboardHeight(FKeyboardListener listener) {
+        return listener.getKeyboardHeight();
     }
 
     /**
@@ -50,7 +50,7 @@ public class FKeyboardHeightLayout extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        final int keyboardHeight = getKeyboardHeight();
+        final int keyboardHeight = getKeyboardHeight(FKeyboardListener.of(mActivity));
         Log.i(FKeyboardHeightLayout.class.getSimpleName(), "onMeasure keyboardHeight:" + keyboardHeight);
         super.onMeasure(widthMeasureSpec,
                 MeasureSpec.makeMeasureSpec(keyboardHeight, MeasureSpec.EXACTLY));
