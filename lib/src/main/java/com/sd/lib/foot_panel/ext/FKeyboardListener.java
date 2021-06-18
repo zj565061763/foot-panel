@@ -187,7 +187,7 @@ public class FKeyboardListener {
         FKeyboardListener listener = MAP_LISTENER.get(activity);
         if (listener == null) {
             listener = new FKeyboardListener(activity);
-            if (listener.start()) {
+            if (!activity.isFinishing() && listener.start()) {
                 MAP_LISTENER.put(activity, listener);
             }
         }
