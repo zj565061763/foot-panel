@@ -16,14 +16,19 @@ import java.util.WeakHashMap;
  */
 public class FKeyboardHeightKeeper {
     private final Activity mActivity;
+    private final int mMinHeight;
     private final Map<View, ViewConfig> mViewHolder = new WeakHashMap<>();
 
     private FKeyboardListener mKeyboardListener;
     private int mViewHeight = 0;
-    private int mMinHeight = -1;
 
     public FKeyboardHeightKeeper(@NonNull Activity activity) {
+        this(activity, -1);
+    }
+
+    public FKeyboardHeightKeeper(@NonNull Activity activity, int minHeight) {
         mActivity = activity;
+        mMinHeight = minHeight < 0 ? dp2px(180, mActivity) : minHeight;
     }
 
     private FKeyboardListener getKeyboardListener() {
@@ -32,25 +37,6 @@ public class FKeyboardHeightKeeper {
             mKeyboardListener.addCallback(mKeyboardCallback);
         }
         return mKeyboardListener;
-    }
-
-    private int getMinHeight() {
-        if (mMinHeight < 0) {
-            mMinHeight = dp2px(180, mActivity);
-        }
-        return mMinHeight;
-    }
-
-    /**
-     * 设置最小高度
-     * <p>
-     * 如果键盘高度小于最小高度，则View的高度自动切换为{@link ViewGroup.LayoutParams#WRAP_CONTENT}
-     */
-    public void setMinHeight(int minHeight) {
-        if (mMinHeight != minHeight) {
-            mMinHeight = minHeight;
-            notifyHeight(mViewHeight);
-        }
     }
 
     /**
@@ -121,7 +107,7 @@ public class FKeyboardHeightKeeper {
                 return;
             }
 
-            if (height < getMinHeight()) {
+            if (height < mMinHeight) {
                 height = ViewGroup.LayoutParams.WRAP_CONTENT;
             }
 
