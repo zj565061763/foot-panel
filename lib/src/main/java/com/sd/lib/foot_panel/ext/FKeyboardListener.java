@@ -81,6 +81,10 @@ public class FKeyboardListener {
      * 开始监听
      */
     private boolean start() {
+        if (mActivity.isFinishing()) {
+            return false;
+        }
+
         final Window window = mActivity.getWindow();
         final boolean start = mWindowKeyboardListener.start(window);
         if (start) {
@@ -187,7 +191,7 @@ public class FKeyboardListener {
         FKeyboardListener listener = MAP_LISTENER.get(activity);
         if (listener == null) {
             listener = new FKeyboardListener(activity);
-            if (!activity.isFinishing() && listener.start()) {
+            if (listener.start()) {
                 MAP_LISTENER.put(activity, listener);
             }
         }
