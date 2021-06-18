@@ -189,7 +189,7 @@ public abstract class FWindowKeyboardListener {
      */
     protected abstract void onKeyboardHeightChanged(int height);
 
-    private final class InternalPopupWindow extends PopupWindow implements View.OnAttachStateChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
+    private final class InternalPopupWindow extends PopupWindow implements View.OnAttachStateChangeListener {
         private final View mView;
         private final Rect mRect = new Rect();
 
@@ -205,35 +205,16 @@ public abstract class FWindowKeyboardListener {
             setInputMethodMode(INPUT_METHOD_NEEDED);
         }
 
-        @Override
-        public void onViewAttachedToWindow(View v) {
-            final ViewTreeObserver observer = v.getViewTreeObserver();
-            if (observer.isAlive()) {
-                observer.addOnGlobalLayoutListener(InternalPopupWindow.this);
-            }
-            FWindowKeyboardListener.this.onStart();
-        }
-
-        @Override
-        public void onViewDetachedFromWindow(View v) {
-            final ViewTreeObserver observer = v.getViewTreeObserver();
-            if (observer.isAlive()) {
-                observer.removeOnGlobalLayoutListener(InternalPopupWindow.this);
-            }
-            FWindowKeyboardListener.this.onStop();
-        }
-
-        @Override
-        public void onGlobalLayout() {
-            mView.getWindowVisibleDisplayFrame(mRect);
-
-            final int viewHeight = mRect.height();
+        /**
+         * 检查View高度
+         */
+        private void checkViewHeight(int viewHeight) {
             if (viewHeight > mMaxViewHeight) {
                 mMaxViewHeight = viewHeight;
             }
 
             int keyboardHeight = mMaxViewHeight - viewHeight;
-            Log.i(TAG, "onGlobalLayout"
+            Log.i(TAG, "checkViewHeight"
                     + " mMaxViewHeight:" + mMaxViewHeight
                     + " viewHeight:" + viewHeight
                     + " keyboardHeight:" + keyboardHeight);
@@ -250,6 +231,32 @@ public abstract class FWindowKeyboardListener {
 
             notifyKeyboardHeight(keyboardHeight);
         }
+
+        @Override
+        public void onViewAttachedToWindow(View v) {
+            final ViewTreeObserver observer = v.getViewTreeObserver();
+            if (observer.isAlive()) {
+                observer.addOnGlobalLayoutListener(mOnGlobalLayoutListener);
+            }
+            FWindowKeyboardListener.this.onStart();
+        }
+
+        @Override
+        public void onViewDetachedFromWindow(View v) {
+            final ViewTreeObserver observer = v.getViewTreeObserver();
+            if (observer.isAlive()) {
+                observer.removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
+            }
+            FWindowKeyboardListener.this.onStop();
+        }
+
+        private final ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mView.getWindowVisibleDisplayFrame(mRect);
+                checkViewHeight(mRect.height());
+            }
+        };
     }
 
     private static boolean isAttached(View view) {
