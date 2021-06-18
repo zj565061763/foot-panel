@@ -205,6 +205,32 @@ public abstract class FWindowKeyboardListener {
             setInputMethodMode(INPUT_METHOD_NEEDED);
         }
 
+        @Override
+        public void onViewAttachedToWindow(View v) {
+            final ViewTreeObserver observer = v.getViewTreeObserver();
+            if (observer.isAlive()) {
+                observer.addOnGlobalLayoutListener(mOnGlobalLayoutListener);
+            }
+            FWindowKeyboardListener.this.onStart();
+        }
+
+        @Override
+        public void onViewDetachedFromWindow(View v) {
+            final ViewTreeObserver observer = v.getViewTreeObserver();
+            if (observer.isAlive()) {
+                observer.removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
+            }
+            FWindowKeyboardListener.this.onStop();
+        }
+
+        private final ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mView.getWindowVisibleDisplayFrame(mRect);
+                checkViewHeight(mRect.height());
+            }
+        };
+
         /**
          * 检查View高度
          */
@@ -231,32 +257,6 @@ public abstract class FWindowKeyboardListener {
 
             notifyKeyboardHeight(keyboardHeight);
         }
-
-        @Override
-        public void onViewAttachedToWindow(View v) {
-            final ViewTreeObserver observer = v.getViewTreeObserver();
-            if (observer.isAlive()) {
-                observer.addOnGlobalLayoutListener(mOnGlobalLayoutListener);
-            }
-            FWindowKeyboardListener.this.onStart();
-        }
-
-        @Override
-        public void onViewDetachedFromWindow(View v) {
-            final ViewTreeObserver observer = v.getViewTreeObserver();
-            if (observer.isAlive()) {
-                observer.removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
-            }
-            FWindowKeyboardListener.this.onStop();
-        }
-
-        private final ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mView.getWindowVisibleDisplayFrame(mRect);
-                checkViewHeight(mRect.height());
-            }
-        };
     }
 
     private static boolean isAttached(View view) {
