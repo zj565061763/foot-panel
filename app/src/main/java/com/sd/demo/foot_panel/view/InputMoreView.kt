@@ -1,16 +1,15 @@
-package com.sd.demo.foot_panel.view;
+package com.sd.demo.foot_panel.view
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.widget.FrameLayout;
+import android.content.Context
+import android.view.LayoutInflater
+import android.widget.FrameLayout
+import com.sd.demo.foot_panel.R
 
-import com.sd.demo.foot_panel.databinding.ViewInputMoreBinding;
-
-public class InputMoreView extends FrameLayout {
-    private final ViewInputMoreBinding mBinding;
-
-    public InputMoreView(Context context) {
-        super(context);
-        mBinding = ViewInputMoreBinding.inflate(LayoutInflater.from(context), this, true);
+/**
+ * 更多View
+ */
+class InputMoreView : FrameLayout {
+    constructor(context: Context) : super(context) {
+        LayoutInflater.from(context).inflate(R.layout.view_input_more, this, true)
     }
 }
