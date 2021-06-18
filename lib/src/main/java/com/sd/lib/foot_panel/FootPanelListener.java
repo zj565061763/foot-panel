@@ -1,5 +1,7 @@
 package com.sd.lib.foot_panel;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class FootPanelListener {
+    private static final String TAG = FootPanelListener.class.getSimpleName();
     private final Map<IFootPanel, IFootPanel.HeightChangeCallback> mMapFootPanel = new HashMap<>();
 
     private IFootPanel mCurrentFootPanel;
@@ -45,6 +48,7 @@ public abstract class FootPanelListener {
     public final void start() {
         if (!mIsStarted) {
             mIsStarted = true;
+            Log.i(TAG, "start");
             notifyHeightChanged();
         }
     }
@@ -54,6 +58,7 @@ public abstract class FootPanelListener {
      */
     public final void stop() {
         mIsStarted = false;
+        Log.i(TAG, "stop");
     }
 
     /**
@@ -64,9 +69,12 @@ public abstract class FootPanelListener {
             return;
         }
 
+        Log.i(TAG, "addFootPanel " + panel);
         final IFootPanel.HeightChangeCallback callback = new IFootPanel.HeightChangeCallback() {
             @Override
             public void onHeightChanged(int height, @NonNull IFootPanel footPanel) {
+                Log.i(TAG, "callback onHeightChanged height:" + height + " footPanel:" + footPanel);
+
                 if (footPanel == mKeyboardFootPanel && height > 0) {
                     // 如果软键盘弹出，则自动设置当前面板为软键盘面板
                     setCurrentFootPanel(mKeyboardFootPanel);
@@ -99,6 +107,7 @@ public abstract class FootPanelListener {
             return;
         }
 
+        Log.i(TAG, "removeFootPanel " + panel);
         if (mKeyboardFootPanel == panel) {
             mKeyboardFootPanel = null;
         }
@@ -114,6 +123,7 @@ public abstract class FootPanelListener {
      * 设置当前底部面板
      */
     public void setCurrentFootPanel(IFootPanel panel) {
+        Log.i(TAG, "setCurrentFootPanel " + panel);
         if (panel == null) {
             setFootPanel(null);
             setFootHeight(0);
@@ -132,6 +142,7 @@ public abstract class FootPanelListener {
     private void setFootPanel(IFootPanel panel) {
         if (mCurrentFootPanel != panel) {
             mCurrentFootPanel = panel;
+            Log.i(TAG, "setFootPanel " + panel);
             onFootPanelChanged(panel);
         }
     }
@@ -146,6 +157,7 @@ public abstract class FootPanelListener {
 
         if (mFootHeight != height) {
             mFootHeight = height;
+            Log.i(TAG, "setFootHeight " + height);
             notifyHeightChanged();
         }
     }
@@ -155,6 +167,7 @@ public abstract class FootPanelListener {
      */
     private void notifyHeightChanged() {
         if (mIsStarted) {
+            Log.i(TAG, "notifyHeightChanged " + mFootHeight);
             onFootHeightChanged(mFootHeight);
         }
     }
