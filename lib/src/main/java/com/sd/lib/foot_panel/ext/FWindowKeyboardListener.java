@@ -79,8 +79,8 @@ public abstract class FWindowKeyboardListener {
      */
     public final void stop() {
         Log.i(TAG, "stop");
-        hidePopupWindow();
         setTarget(null);
+        hidePopupWindow();
     }
 
     private View getTarget() {
