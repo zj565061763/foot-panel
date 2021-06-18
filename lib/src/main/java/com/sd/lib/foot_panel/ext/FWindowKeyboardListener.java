@@ -116,13 +116,13 @@ public abstract class FWindowKeyboardListener {
     private final View.OnAttachStateChangeListener mOnAttachStateChangeListener = new View.OnAttachStateChangeListener() {
         @Override
         public void onViewAttachedToWindow(View v) {
-            Log.i(TAG, "onViewAttachedToWindow view:" + v);
+            Log.i(TAG, "target onViewAttachedToWindow " + v);
             showPopupWindow();
         }
 
         @Override
         public void onViewDetachedFromWindow(View v) {
-            Log.i(TAG, "onViewDetachedFromWindow view:" + v);
+            Log.i(TAG, "target onViewDetachedFromWindow " + v);
             hidePopupWindow();
         }
     };
@@ -158,6 +158,7 @@ public abstract class FWindowKeyboardListener {
      */
     private void hidePopupWindow() {
         if (mPopupWindow != null) {
+            Log.i(TAG, "hidePopupWindow");
             mPopupWindow.dismiss();
             mPopupWindow = null;
         }
