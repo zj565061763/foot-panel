@@ -26,6 +26,10 @@
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
+            android:name=".KeyboardLayoutActivity"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
             android:name=".FootPanelActivity"
             android:windowSoftInputMode="adjustNothing" />
 
