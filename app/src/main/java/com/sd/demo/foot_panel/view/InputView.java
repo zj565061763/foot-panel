@@ -22,7 +22,7 @@ import com.sd.lib.foot_panel.panel.ViewFootPanel;
 import com.sd.lib.utils.FKeyboardUtil;
 
 public class InputView extends FrameLayout implements View.OnClickListener {
-    public static final String TAG = InputView.class.getSimpleName();
+    private static final String TAG = InputView.class.getSimpleName();
 
     private final ViewInputBinding mBinding;
 
