@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -56,13 +55,7 @@ public class InputView extends FrameLayout implements View.OnClickListener {
 
     private FKeyboardHeightKeeper getKeyboardHeightKeeper() {
         if (mKeyboardHeightKeeper == null) {
-            mKeyboardHeightKeeper = new FKeyboardHeightKeeper((Activity) getContext()) {
-                @Override
-                protected void updateViewHeight(View view, ViewGroup.LayoutParams params) {
-                    super.updateViewHeight(view, params);
-                    Log.i(TAG, "updateViewHeight height:" + params.height + " view:" + view);
-                }
-            };
+            mKeyboardHeightKeeper = new FKeyboardHeightKeeper((Activity) getContext());
         }
         return mKeyboardHeightKeeper;
     }
