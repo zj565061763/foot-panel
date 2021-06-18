@@ -23,6 +23,6 @@ class HeightKeeperActivity : AppCompatActivity() {
         setContentView(R.layout.activity_height_keeper)
 
         // 添加要保持键盘高度的View
-        _keyboardHeightKeeper.addView(findViewById(R.id.tv_content))
+        _keyboardHeightKeeper.addView(findViewById(R.id.view_keyboard_height))
     }
 }

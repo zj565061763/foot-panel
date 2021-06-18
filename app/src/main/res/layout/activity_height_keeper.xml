@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <FrameLayout
-        android:id="@+id/tv_content"
+        android:id="@+id/view_keyboard_height"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#000000" />
