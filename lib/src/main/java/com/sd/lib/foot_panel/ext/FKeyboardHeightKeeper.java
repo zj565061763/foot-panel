@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -84,7 +86,9 @@ public class FKeyboardHeightKeeper {
 
         if (mViewHeight != height) {
             mViewHeight = height;
-            for (ViewConfig item : mViewHolder.values()) {
+
+            final List<ViewConfig> list = new ArrayList<>(mViewHolder.values());
+            for (ViewConfig item : list) {
                 item.updateHeight(height);
             }
         }
