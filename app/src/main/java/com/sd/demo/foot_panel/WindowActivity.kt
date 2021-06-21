@@ -38,6 +38,7 @@ class WindowActivity : AppCompatActivity() {
 
         override fun onKeyboardHeightChanged(height: Int) {
             Log.i(TAG, "listener onKeyboardHeightChanged height:${height}")
+            _binding.etContent.setText(height.toString())
         }
     }
 }
