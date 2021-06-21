@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.sd.lib.foot_panel.FootPanelListener;
-import com.sd.lib.foot_panel.ext.FKeyboardHeightKeeper;
 import com.sd.lib.foot_panel.ext.FKeyboardHeightLayout;
 import com.sd.lib.foot_panel.panel.IFootPanel;
 import com.sd.lib.foot_panel.panel.KeyboardFootPanel;
@@ -29,8 +28,6 @@ public class FootPanelLayout extends FrameLayout {
 
     /** 键盘高度View */
     private View mKeyBoardView;
-    /** 键盘高度保持 */
-    private FKeyboardHeightKeeper mKeyboardHeightKeeper;
 
     private Callback mCallback;
 
@@ -47,6 +44,13 @@ public class FootPanelLayout extends FrameLayout {
 
         mFootPanelListener.addFootPanel(mKeyboardPanel);
         mFootPanelListener.addFootPanel(mViewPanel);
+    }
+
+    /**
+     * 返回内容View
+     */
+    public View getContentView() {
+        return mContentView;
     }
 
     /**
@@ -69,7 +73,6 @@ public class FootPanelLayout extends FrameLayout {
 
         if (oldView != null) {
             removeView(oldView);
-            getKeyboardHeightKeeper().removeView(oldView);
         }
 
         if (view != null) {
@@ -78,7 +81,6 @@ public class FootPanelLayout extends FrameLayout {
 
             if (view != mKeyBoardView) {
                 mFootPanelListener.setCurrentFootPanel(mViewPanel);
-                getKeyboardHeightKeeper().addView(view);
             }
         } else {
             mFootPanelListener.setCurrentFootPanel(null);
@@ -107,13 +109,6 @@ public class FootPanelLayout extends FrameLayout {
             mKeyBoardView = new FKeyboardHeightLayout(mActivity);
         }
         return mKeyBoardView;
-    }
-
-    private FKeyboardHeightKeeper getKeyboardHeightKeeper() {
-        if (mKeyboardHeightKeeper == null) {
-            mKeyboardHeightKeeper = new FKeyboardHeightKeeper(mActivity);
-        }
-        return mKeyboardHeightKeeper;
     }
 
     @Override
