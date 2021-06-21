@@ -87,8 +87,6 @@ public abstract class FootPanelListener {
         };
 
         mMapFootPanel.put(panel, callback);
-        panel.initPanel(callback);
-
         if (panel instanceof KeyboardFootPanel) {
             if (mKeyboardFootPanel == null) {
                 mKeyboardFootPanel = (KeyboardFootPanel) panel;
@@ -96,6 +94,8 @@ public abstract class FootPanelListener {
                 throw new IllegalArgumentException(KeyboardFootPanel.class.getSimpleName() + " already add");
             }
         }
+
+        panel.initPanel(callback);
     }
 
     /**
@@ -108,11 +108,11 @@ public abstract class FootPanelListener {
         }
 
         Log.i(TAG, "removeFootPanel " + panel);
+        panel.releasePanel();
+
         if (mKeyboardFootPanel == panel) {
             mKeyboardFootPanel = null;
         }
-
-        panel.releasePanel();
 
         if (mCurrentFootPanel == panel) {
             setCurrentFootPanel(null);
