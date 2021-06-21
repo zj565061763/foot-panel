@@ -1,5 +1,6 @@
 package com.sd.demo.foot_panel.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.sd.demo.foot_panel.databinding.ViewInputBinding;
+import com.sd.lib.foot_panel.ext.FKeyboardHeightKeeper;
 import com.sd.lib.foot_panel.view.FootPanelLayout;
 import com.sd.lib.utils.FKeyboardUtil;
 
@@ -21,6 +23,9 @@ public class InputView extends FrameLayout implements View.OnClickListener {
 
     /** 更多View */
     private InputMoreView mMoreView;
+
+    /** 将View的高度与键盘的高度保持一致 */
+    private FKeyboardHeightKeeper mKeyboardHeightKeeper;
 
     public InputView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -35,9 +40,17 @@ public class InputView extends FrameLayout implements View.OnClickListener {
         });
     }
 
+    private FKeyboardHeightKeeper getKeyboardHeightKeeper() {
+        if (mKeyboardHeightKeeper == null) {
+            mKeyboardHeightKeeper = new FKeyboardHeightKeeper((Activity) getContext());
+        }
+        return mKeyboardHeightKeeper;
+    }
+
     private InputMoreView getMoreView() {
         if (mMoreView == null) {
             mMoreView = new InputMoreView(getContext());
+            getKeyboardHeightKeeper().addView(mMoreView);
         }
         return mMoreView;
     }
