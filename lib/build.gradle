@@ -5,8 +5,8 @@ plugins {
 
 def libGroupId = "com.sd.lib.android"
 def libArtifactId = "foot-panel"
-def libVersionCode = 20210618
-def libVersionName = "1.0.0-rc03"
+def libVersionCode = 20210621
+def libVersionName = "1.0.0-rc04"
 
 android {
     compileSdkVersion 30
